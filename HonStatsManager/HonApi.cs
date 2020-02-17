@@ -30,14 +30,14 @@ namespace HonStatsManager
                 var response = (JArray) Get($"multi_match/all/matchids/{string.Join("+", bucket)}");
                 foreach (var matchId in bucket)
                 {
-                    var settings = response[0].Single(foo => (string) foo["match_id"] == matchId);
-                    var inventories = response[1].Where(foo => (string) foo["match_id"] == matchId);
-                    var statistics = response[2].Where(foo => (string) foo["match_id"] == matchId);
-                    var summary = response[3].Single(foo => (string) foo["match_id"] == matchId);
+                    var settings = response[0].Single(token => (string) token["match_id"] == matchId);
+                    var inventories = response[1].Where(token => (string) token["match_id"] == matchId);
+                    var statistics = response[2].Where(token => (string) token["match_id"] == matchId);
+                    var summary = response[3].Single(token => (string) token["match_id"] == matchId);
 
                     yield return new Match(
                         matchId,
-                        DateTime.Parse((string) summary["mdt"]),
+                        (DateTime) summary["mdt"],
                         TimeSpan.FromSeconds((int) summary["time_played"]),
                         statistics.Select(jPlayer => new PlayerResult(
                             new Player(

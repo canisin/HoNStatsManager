@@ -15,7 +15,7 @@ namespace HonStatsManager
     {
         public static MatchType GetMatchType(this Match match)
         {
-            if (!match.PlayerResults.Select(p => p.Player).All(Honzor.IsPlayer))
+            if (!match.PlayerResults.Select(p => p.Player).All(Honzor.IsMember))
             {
                 return MatchType.Other;
             }

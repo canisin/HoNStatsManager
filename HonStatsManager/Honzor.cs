@@ -17,7 +17,7 @@ namespace HonStatsManager
                 new Player("1248693", "Turritopsis")
             };
 
-        public static bool IsPlayer(Player player)
+        public static bool IsMember(Player player)
         {
             return player.AccountId.In(Players.Select(p => p.AccountId));
         }

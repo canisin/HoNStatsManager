@@ -2,26 +2,23 @@
 
 namespace HonStatsManager
 {
-    internal enum Team
+    public enum Team
     {
-        Legion,
-        Hellbourne
+        Legion = 1,
+        Hellbourne = 2
     }
 
     internal static class TeamExtensions
     {
-        public static Team ToTeam(this int teamIndex)
+        public static Team ToTeam(this int value)
         {
-            switch (teamIndex)
+            if (!Enum.IsDefined(typeof(Team), value))
             {
-                case 1:
-                    return Team.Legion;
-                case 2:
-                    return Team.Hellbourne;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(teamIndex));
+                throw new ArgumentOutOfRangeException(nameof(value), value,
+                    "Argument value must be either 1 or 2.");
             }
+
+            return (Team) value;
         }
     }
 }
