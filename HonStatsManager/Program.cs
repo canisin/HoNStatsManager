@@ -25,6 +25,8 @@ namespace HonStatsManager
 
             Console.WriteLine($"Match ids: {matchIds.Count}");
             Console.WriteLine($"Matches: {matches.Count}");
+
+            Console.WriteLine($"HonApi rate limit wait count = {HonApi.WaitCount}");
         }
     }
 }

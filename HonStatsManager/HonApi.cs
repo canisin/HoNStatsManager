@@ -85,6 +85,8 @@ namespace HonStatsManager
             return JsonConvert.DeserializeObject(GetRaw(parameters));
         }
 
+        public static int WaitCount { get; private set; }
+
         private static string GetRaw(string parameters)
         {
             while (true)
@@ -114,6 +116,7 @@ namespace HonStatsManager
 
                             case "Too many requests":
                                 Logger.Log("Waiting for rate limiter..");
+                                ++WaitCount;
                                 Thread.Sleep(RateLimitWait);
                                 continue;
 
