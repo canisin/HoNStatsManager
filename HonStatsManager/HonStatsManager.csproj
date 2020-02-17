@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HonApi.cs" />
     <Compile Include="Honzor.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Player.cs" />
