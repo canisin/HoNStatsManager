@@ -51,6 +51,7 @@
     <Compile Include="Honzor.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Match.cs" />
+    <Compile Include="MatchType.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayerResult.cs" />
     <Compile Include="Program.cs" />

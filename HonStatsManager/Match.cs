@@ -9,6 +9,7 @@ namespace HonStatsManager
         public DateTime DateTime { get; }
         public TimeSpan Duration { get; }
         public List<PlayerResult> PlayerResults { get; }
+        public MatchType MatchType { get; }
 
         public Match(string matchId, DateTime dateTime, TimeSpan duration, List<PlayerResult> playerResults)
         {
@@ -16,6 +17,8 @@ namespace HonStatsManager
             DateTime = dateTime;
             Duration = duration;
             PlayerResults = playerResults;
+
+            MatchType = this.GetMatchType();
         }
     }
 }

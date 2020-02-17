@@ -32,6 +32,8 @@ namespace HonStatsManager
                         Console.WriteLine($"  {playerResult.Player.Nickname}");
                     }
                 }
+
+                Console.WriteLine($"Match Type: {match.MatchType}");
             }
         }
     }

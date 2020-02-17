@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace HonStatsManager
 {
@@ -15,5 +16,10 @@ namespace HonStatsManager
                 new Player("1260616", "papercute"),
                 new Player("1248693", "Turritopsis")
             };
+
+        public static bool IsPlayer(Player player)
+        {
+            return player.AccountId.In(Players.Select(p => p.AccountId));
+        }
     }
 }

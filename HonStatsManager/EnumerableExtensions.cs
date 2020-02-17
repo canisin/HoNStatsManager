@@ -6,6 +6,16 @@ namespace HonStatsManager
 {
     internal static class EnumerableExtensions
     {
+        public static bool In<T>(this T item, params T[] seq)
+        {
+            return item.In((IEnumerable<T>) seq);
+        }
+
+        public static bool In<T>(this T item, IEnumerable<T> seq)
+        {
+            return seq.Contains(item);
+        }
+
         public static IEnumerable<List<T>> SplitBy<T>(this IEnumerable<T> seq, int splitCount)
         {
             if (splitCount <= 0)
