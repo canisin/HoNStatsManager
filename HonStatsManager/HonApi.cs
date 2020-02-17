@@ -17,28 +17,9 @@ namespace HonStatsManager
         {
             Logger.Log($"Getting match history for {player.Nickname}");
 
-            var response = Get($"match_history/public/accountid/{player.AccountId}");
-            var history = (string) ((JArray) response)[0]["history"];
+            var response = (JArray) Get($"match_history/public/accountid/{player.AccountId}");
+            var history = (string) response[0]["history"];
             return history.Split(',').Select(item => item.Split('|').First()).ToList();
-        }
-
-        public static Match GetMatch(string matchId)
-        {
-            Logger.Log($"Getting match {matchId}");
-
-            var response = Get($"match/all/matchid/{matchId}");
-            var jMatch = new JMatch((JArray) response);
-
-            return new Match(
-                matchId,
-                DateTime.Parse((string) jMatch.Summary["mdt"]),
-                TimeSpan.FromSeconds((int) jMatch.Summary["time_played"]),
-                jMatch.Statistics.Select(jPlayer => new PlayerResult(
-                    new Player(
-                        (string) jPlayer["account_id"],
-                        (string) jPlayer["nickname"]),
-                    ((int) jPlayer["team"]).ToTeam()
-                )).ToList());
         }
 
         public static IEnumerable<Match> GetMultiMatch(IEnumerable<string> matchIds)
@@ -115,22 +96,6 @@ namespace HonStatsManager
                         throw;
                     }
                 }
-            }
-        }
-
-        private class JMatch
-        {
-            public JObject Settings { get; }
-            public JArray Inventories { get; }
-            public JArray Statistics { get; }
-            public JObject Summary { get; }
-
-            public JMatch(JArray json)
-            {
-                Settings = (JObject) json[0][0];
-                Inventories = (JArray) json[1];
-                Statistics = (JArray) json[2];
-                Summary = (JObject) json[3][0];
             }
         }
     }
