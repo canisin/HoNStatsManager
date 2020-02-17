@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace HonStatsManager
 {
@@ -20,10 +22,22 @@ namespace HonStatsManager
             return history.Split(',').Select(item => item.Split('|').First()).ToList();
         }
 
-        public static dynamic GetMatch(string matchId)
+        public static Match GetMatch(string matchId)
         {
             Logger.Log($"Getting match {matchId}");
-            return Get($"match/all/matchid/{matchId}");
+            var jMatch = new JMatch(Get($"match/all/matchid/{matchId}"));
+
+            return new Match(
+                matchId,
+                DateTime.MinValue,
+                TimeSpan.FromSeconds((int) jMatch.Summary["time_played"]),
+                jMatch.Statistics.Select(jPlayer => new PlayerResult(
+                    new Player(
+                        (string) jPlayer["account_id"],
+                        (string) jPlayer["nickname"],
+                        ""),
+                    ((int) jPlayer["team"]).ToTeam()
+                )).ToList());
         }
 
         public static string GetMatchRaw(string matchId)
@@ -73,6 +87,22 @@ namespace HonStatsManager
                         throw;
                     }
                 }
+            }
+        }
+
+        private class JMatch
+        {
+            public JObject Settings { get; }
+            public JArray Inventories { get; }
+            public JArray Statistics { get; }
+            public JObject Summary { get; }
+
+            public JMatch(JArray json)
+            {
+                Settings = (JObject) json[0][0];
+                Inventories = (JArray) json[1];
+                Statistics = (JArray) json[2];
+                Summary = (JObject) json[3][0];
             }
         }
     }

@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading;
-using Newtonsoft.Json;
 
 namespace HonStatsManager
 {
@@ -27,7 +22,16 @@ namespace HonStatsManager
 
         private static void MainImpl(string[] args)
         {
-            Console.WriteLine(HonApi.GetMatchRaw(HonApi.GetMatchHistory(Honzor.Players[0]).Last()));
+            var match = HonApi.GetMatch(HonApi.GetMatchHistory(Honzor.Players[0]).Last());
+
+            foreach (Team team in Enum.GetValues(typeof(Team)))
+            {
+                Console.WriteLine($"={team}=");
+                foreach (var playerResult in match.PlayerResults.Where(p => p.Team == team))
+                {
+                    Console.WriteLine($"  {playerResult.Player.Nickname}");
+                }
+            }
         }
     }
 }

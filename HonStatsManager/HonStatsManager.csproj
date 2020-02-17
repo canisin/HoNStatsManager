@@ -49,9 +49,12 @@
     <Compile Include="HonApi.cs" />
     <Compile Include="Honzor.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="Match.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="PlayerResult.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Team.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
