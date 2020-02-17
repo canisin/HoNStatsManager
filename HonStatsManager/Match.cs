@@ -5,20 +5,20 @@ namespace HonStatsManager
 {
     internal class Match
     {
-        public string MatchId { get; }
-        public DateTime DateTime { get; }
+        public string Id { get; }
+        public DateTime Date { get; }
         public TimeSpan Duration { get; }
         public List<PlayerResult> PlayerResults { get; }
-        public MatchType MatchType { get; }
+        public MatchType Type { get; }
 
-        public Match(string matchId, DateTime dateTime, TimeSpan duration, List<PlayerResult> playerResults)
+        public Match(string id, DateTime date, TimeSpan duration, List<PlayerResult> playerResults)
         {
-            MatchId = matchId;
-            DateTime = dateTime;
+            Id = id;
+            Date = date;
             Duration = duration;
             PlayerResults = playerResults;
 
-            MatchType = this.GetMatchType();
+            Type = this.GetMatchType();
         }
     }
 }

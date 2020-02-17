@@ -20,7 +20,7 @@ namespace HonStatsManager
 
             foreach (var matchType in Enum.GetValues(typeof(MatchType)).Cast<MatchType>())
             {
-                Console.WriteLine($"{matchType}: {matches.Count(m => m.MatchType == matchType)}");
+                Console.WriteLine($"{matchType}: {matches.Count(m => m.Type == matchType)}");
             }
 
             Console.WriteLine($"Match ids: {matchIds.Count}");
