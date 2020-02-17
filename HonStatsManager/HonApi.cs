@@ -15,13 +15,13 @@ namespace HonStatsManager
         public static readonly string BaseUrl = @"http://api.heroesofnewerth.com";
         public static readonly string Token = @"?token=0C0JQEHC8VZW5KFK";
 
-        public static List<string> GetMatchHistory(Player player)
+        public static List<(string Id, DateTime Date)> GetMatchHistory(Player player)
         {
             Logger.Log($"Getting match history for {player.Nickname}");
 
             var response = (JArray) Get($"match_history/public/accountid/{player.AccountId}");
-            var history = (string) response[0]["history"];
-            return history.Split(',').Select(item => item.Split('|').First()).ToList();
+            var history = ((string) response[0]["history"]).Split(',').Select(item => item.Split('|'));
+            return history.Select(item => (item.First(), DateTime.ParseExact(item.Last(), "MM/dd/yyyy", null))).ToList();
         }
 
         public static IEnumerable<Match> GetMultiMatch(List<string> matchIds)

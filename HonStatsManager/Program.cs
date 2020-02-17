@@ -15,7 +15,7 @@ namespace HonStatsManager
 
         private static void MainImpl(string[] args)
         {
-            var matchIds = Honzor.Players.SelectMany(HonApi.GetMatchHistory).Distinct().ToList();
+            var matchIds = Honzor.GetMatchHistory();
             var matches = HonApi.GetMultiMatch(matchIds).ToList();
 
             foreach (var matchType in Enum.GetValues(typeof(MatchType)).Cast<MatchType>())
