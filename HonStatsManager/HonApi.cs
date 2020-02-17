@@ -26,6 +26,12 @@ namespace HonStatsManager
             return Get($"match/all/matchid/{matchId}");
         }
 
+        public static string GetMatchRaw(string matchId)
+        {
+            Logger.Log($"Getting match raw {matchId}");
+            return GetRaw($"match/all/matchid/{matchId}");
+        }
+
         private static dynamic Get(string parameters)
         {
             return JsonConvert.DeserializeObject<dynamic>(GetRaw(parameters));
