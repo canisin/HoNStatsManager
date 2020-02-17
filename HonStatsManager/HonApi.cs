@@ -14,6 +14,8 @@ namespace HonStatsManager
     {
         public static readonly string BaseUrl = @"http://api.heroesofnewerth.com";
         public static readonly string Token = @"?token=0C0JQEHC8VZW5KFK";
+        private const int MultiMatchBucketCount = 25;
+        private const int RateLimitWait = 1000;
 
         public static List<(string Id, DateTime Date)> GetMatchHistory(Player player)
         {
@@ -30,8 +32,7 @@ namespace HonStatsManager
             var queryCount = 0;
             var stopWatch = Stopwatch.StartNew();
 
-            const int multiMatchBucketCount = 25;
-            foreach (var bucket in matchIds.SplitBy(multiMatchBucketCount))
+            foreach (var bucket in matchIds.SplitBy(MultiMatchBucketCount))
             {
                 var response = (JArray) Get($"multi_match/all/matchids/{string.Join("+", bucket)}");
 
@@ -106,19 +107,19 @@ namespace HonStatsManager
 
                         Logger.Log($"{code} - {description} - {body}");
 
-                        if (body == "No results.")
+                        switch (body)
                         {
-                            return "";
-                        }
+                            case "No results.":
+                                return "";
 
-                        if (body == "Too many requests")
-                        {
-                            Logger.Log("Waiting for rate limiter..");
-                            Thread.Sleep(1000);
-                            continue;
-                        }
+                            case "Too many requests":
+                                Logger.Log("Waiting for rate limiter..");
+                                Thread.Sleep(RateLimitWait);
+                                continue;
 
-                        throw;
+                            default:
+                                throw;
+                        }
                     }
                 }
             }
