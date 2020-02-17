@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="HonApi.cs" />
     <Compile Include="Honzor.cs" />
     <Compile Include="Logger.cs" />

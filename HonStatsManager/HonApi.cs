@@ -41,6 +41,33 @@ namespace HonStatsManager
                 )).ToList());
         }
 
+        public static IEnumerable<Match> GetMultiMatch(IEnumerable<string> matchIds)
+        {
+            const int multiMatchBucketCount = 25;
+            foreach (var bucket in matchIds.SplitBy(multiMatchBucketCount))
+            {
+                var response = (JArray) Get($"multi_match/all/matchids/{string.Join("+", bucket)}");
+                foreach (var matchId in bucket)
+                {
+                    var settings = response[0].Single(foo => (string) foo["match_id"] == matchId);
+                    var inventories = response[1].Where(foo => (string) foo["match_id"] == matchId);
+                    var statistics = response[2].Where(foo => (string) foo["match_id"] == matchId);
+                    var summary = response[3].Single(foo => (string) foo["match_id"] == matchId);
+
+                    yield return new Match(
+                        matchId,
+                        DateTime.Parse((string) summary["mdt"]),
+                        TimeSpan.FromSeconds((int) summary["time_played"]),
+                        statistics.Select(jPlayer => new PlayerResult(
+                            new Player(
+                                (string) jPlayer["account_id"],
+                                (string) jPlayer["nickname"]),
+                            ((int) jPlayer["team"]).ToTeam()
+                        )).ToList());
+                }
+            }
+        }
+
         public static string GetMatchRaw(string matchId)
         {
             Logger.Log($"Getting match raw {matchId}");
