@@ -7,15 +7,8 @@ namespace HonStatsManager
     {
         public static void Main(string[] args)
         {
-            try
-            {
-                MainImpl(args);
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-            }
-
+            MainImpl(args);
+            Console.WriteLine();
             Console.WriteLine("Please press any key to continue...");
             Console.ReadKey(true);
         }
