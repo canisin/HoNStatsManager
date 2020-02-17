@@ -18,14 +18,16 @@ namespace HonStatsManager
             Logger.Log($"Getting match history for {player.Nickname}");
 
             var response = Get($"match_history/public/accountid/{player.AccountId}");
-            var history = (string) ((IEnumerable<dynamic>) response).First().history;
+            var history = (string) ((JArray) response)[0]["history"];
             return history.Split(',').Select(item => item.Split('|').First()).ToList();
         }
 
         public static Match GetMatch(string matchId)
         {
             Logger.Log($"Getting match {matchId}");
-            var jMatch = new JMatch(Get($"match/all/matchid/{matchId}"));
+
+            var response = Get($"match/all/matchid/{matchId}");
+            var jMatch = new JMatch((JArray) response);
 
             return new Match(
                 matchId,
@@ -46,9 +48,9 @@ namespace HonStatsManager
             return GetRaw($"match/all/matchid/{matchId}");
         }
 
-        private static dynamic Get(string parameters)
+        private static object Get(string parameters)
         {
-            return JsonConvert.DeserializeObject<dynamic>(GetRaw(parameters));
+            return JsonConvert.DeserializeObject(GetRaw(parameters));
         }
 
         private static string GetRaw(string parameters)
