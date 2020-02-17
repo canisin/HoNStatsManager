@@ -36,8 +36,7 @@ namespace HonStatsManager
                 jMatch.Statistics.Select(jPlayer => new PlayerResult(
                     new Player(
                         (string) jPlayer["account_id"],
-                        (string) jPlayer["nickname"],
-                        ""),
+                        (string) jPlayer["nickname"]),
                     ((int) jPlayer["team"]).ToTeam()
                 )).ToList());
         }

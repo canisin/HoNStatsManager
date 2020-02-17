@@ -2,15 +2,13 @@
 {
     internal class Player
     {
-        public readonly string AccountId;
-        public readonly string Nickname;
-        public readonly string Name;
+        public string AccountId { get; }
+        public string Nickname { get; }
 
-        public Player(string accountId, string nickname, string name)
+        public Player(string accountId, string nickname)
         {
             AccountId = accountId;
             Nickname = nickname;
-            Name = name;
         }
     }
 }
