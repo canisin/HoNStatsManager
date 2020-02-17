@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -22,15 +24,37 @@ namespace HonStatsManager
             return history.Split(',').Select(item => item.Split('|').First()).ToList();
         }
 
-        public static IEnumerable<Match> GetMultiMatch(IEnumerable<string> matchIds)
+        public static IEnumerable<Match> GetMultiMatch(List<string> matchIds)
         {
+            Logger.Log($"Querying {matchIds.Count} matches..");
+            var queryCount = 0;
+            var stopWatch = Stopwatch.StartNew();
+
             const int multiMatchBucketCount = 25;
             foreach (var bucket in matchIds.SplitBy(multiMatchBucketCount))
             {
                 var response = (JArray) Get($"multi_match/all/matchids/{string.Join("+", bucket)}");
+
+                queryCount += bucket.Count;
+                var currentDuration = stopWatch.Elapsed.TotalSeconds;
+                var estimatedDuration = currentDuration / bucket.Count * queryCount;
+                Logger.Log($"{queryCount}/{matchIds.Count}" +
+                           $" - Current duration: {TimeSpan.FromSeconds(currentDuration)}" +
+                           $" - Estimated time to complete: {TimeSpan.FromSeconds(estimatedDuration)}");
+
+                if (response == null)
+                {
+                    continue;
+                }
+
                 foreach (var matchId in bucket)
                 {
-                    var settings = response[0].Single(token => (string) token["match_id"] == matchId);
+                    var settings = response[0].SingleOrDefault(token => (string) token["match_id"] == matchId);
+                    if (settings == null)
+                    {
+                        continue;
+                    }
+
                     var inventories = response[1].Where(token => (string) token["match_id"] == matchId);
                     var statistics = response[2].Where(token => (string) token["match_id"] == matchId);
                     var summary = response[3].Single(token => (string) token["match_id"] == matchId);
@@ -87,11 +111,12 @@ namespace HonStatsManager
                             return "";
                         }
 
-                        //if (body == "<rate limit error>")
-                        //{
-                        //    Thread.Sleep(1000);
-                        //    continue;
-                        //}
+                        if (body == "Too many requests")
+                        {
+                            Logger.Log("Waiting for rate limiter..");
+                            Thread.Sleep(1000);
+                            continue;
+                        }
 
                         throw;
                     }

@@ -38,5 +38,10 @@ namespace HonStatsManager
             if (temp.Any())
                 yield return temp;
         }
+
+        public static IEnumerable<T> Except<T>(this IEnumerable<T> seq, params T[] items)
+        {
+            return seq.Except((IEnumerable<T>) items);
+        }
     }
 }

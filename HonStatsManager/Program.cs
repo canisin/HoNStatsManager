@@ -15,26 +15,16 @@ namespace HonStatsManager
 
         private static void MainImpl(string[] args)
         {
-            var matches = HonApi.GetMultiMatch(HonApi.GetMatchHistory(Honzor.Players[0]).AsEnumerable().Reverse().Take(2).Reverse());
+            var matchIds = Honzor.Players.SelectMany(HonApi.GetMatchHistory).Distinct().ToList();
+            var matches = HonApi.GetMultiMatch(matchIds).ToList();
 
-            foreach (var match in matches)
+            foreach (var matchType in Enum.GetValues(typeof(MatchType)).Cast<MatchType>())
             {
-                Console.WriteLine();
-                Console.WriteLine();
-
-                Console.WriteLine($"Date Played: {match.DateTime}");
-                Console.WriteLine($"Duration: {match.Duration}");
-                foreach (Team team in Enum.GetValues(typeof(Team)))
-                {
-                    Console.WriteLine($"={team}=");
-                    foreach (var playerResult in match.PlayerResults.Where(p => p.Team == team))
-                    {
-                        Console.WriteLine($"  {playerResult.Player.Nickname}");
-                    }
-                }
-
-                Console.WriteLine($"Match Type: {match.MatchType}");
+                Console.WriteLine($"{matchType}: {matches.Count(m => m.MatchType == matchType)}");
             }
+
+            Console.WriteLine($"Match ids: {matchIds.Count}");
+            Console.WriteLine($"Matches: {matches.Count}");
         }
     }
 }
