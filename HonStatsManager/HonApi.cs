@@ -37,7 +37,7 @@ namespace HonStatsManager
 
                 queryCount += bucket.Count;
                 var currentDuration = stopWatch.Elapsed.TotalSeconds;
-                var estimatedDuration = currentDuration / bucket.Count * queryCount;
+                var estimatedDuration = currentDuration / queryCount * matchIds.Count;
                 Logger.Log($"{queryCount}/{matchIds.Count}" +
                            $" - Current duration: {TimeSpan.FromSeconds(currentDuration)}" +
                            $" - Estimated time to complete: {TimeSpan.FromSeconds(estimatedDuration)}");
