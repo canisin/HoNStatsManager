@@ -31,7 +31,7 @@ namespace HonStatsManager
 
             return new Match(
                 matchId,
-                DateTime.MinValue,
+                DateTime.Parse((string) jMatch.Summary["mdt"]),
                 TimeSpan.FromSeconds((int) jMatch.Summary["time_played"]),
                 jMatch.Statistics.Select(jPlayer => new PlayerResult(
                     new Player(

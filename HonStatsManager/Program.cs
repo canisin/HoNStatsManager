@@ -17,6 +17,8 @@ namespace HonStatsManager
         {
             var match = HonApi.GetMatch(HonApi.GetMatchHistory(Honzor.Players[0]).Last());
 
+            Console.WriteLine($"Date Played: {match.DateTime}");
+            Console.WriteLine($"Duration: {match.Duration}");
             foreach (Team team in Enum.GetValues(typeof(Team)))
             {
                 Console.WriteLine($"={team}=");
