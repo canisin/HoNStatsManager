@@ -31,6 +31,21 @@ namespace HonStatsManager
 
             Type = this.GetMatchType();
         }
+
+        public List<(string Key, int Size, bool IsWinner)> GetTeams()
+        {
+            return Enum.GetValues(typeof(Team)).Cast<Team>()
+                .Select(t => PlayerResults.Where(pr => pr.Team == t).ToList())
+                .Select(t => (
+                    Key: t.Select(pr => pr.Player.Nickname)
+                        .OrderBy(p => p)
+                        .StringJoin(" - "),
+                    Size: t.Count,
+                    IsWinner: t.First().Wins))
+                .OrderBy(t => t.Size)
+                .ThenBy(t => t.Key)
+                .ToList();
+        }
     }
 
     internal static class MatchExtensions

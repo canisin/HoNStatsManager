@@ -31,42 +31,17 @@ namespace HonStatsManager
             Console.WriteLine();
             foreach (var matchGroupGroup in matches
                 .Where(m => m.Type != MatchType.Other)
-                .GroupBy(m => Enum.GetValues(typeof(Team)).Cast<Team>()
-                    .Select(t => m.PlayerResults
-                        .Where(pr => pr.Team == t)
-                        .Select(pr => pr.Player.Nickname)
-                        .OrderBy(p => p)
-                        .ToList())
-                    .Select(t => (Count: t.Count, Key: t.StringJoin(" - ")))
-                    .OrderBy(t => t.Count)
-                    .ThenBy(t => t.Key)
-                    .Select(t => t.Key)
-                    .StringJoin(" vs "))
-                .OrderBy(mg => mg.Key)
-                .GroupBy(mg => mg.First().Type)
-                .OrderBy(mgg => mgg.Key))
+                .GroupBy(m => m.Type)
+                .OrderBy(mg => mg.Key))
             {
                 Console.WriteLine();
                 Console.WriteLine(matchGroupGroup.Key);
-                foreach (var matchGroup in matchGroupGroup)
+                foreach (var matchGroup in matchGroupGroup
+                    .Select(m => m.GetTeams())
+                    .GroupBy(ts => ts.Select(t => t.Key).StringJoin(" vs "))
+                    .OrderBy(mg => mg.Key))
                 {
                     Console.WriteLine($"{matchGroup.Key} -> {matchGroup.Count()} matches");
-                }
-            }
-
-            Console.WriteLine();
-            Console.WriteLine();
-            foreach (var match in matches)
-            {
-                foreach (var playerResult in match.PlayerResults)
-                {
-                    if (playerResult.Wins == playerResult.Losses)
-                    {
-                        Console.WriteLine(
-                            $"matchid: {match.Id}, nickname: {playerResult.Player.Nickname}, " +
-                            $" wins: {playerResult.Wins}" +
-                            $" losses: {playerResult.Losses}");
-                    }
                 }
             }
         }
