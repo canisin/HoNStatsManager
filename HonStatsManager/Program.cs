@@ -18,12 +18,40 @@ namespace HonStatsManager
 
         private static void MainImpl(string[] args)
         {
-            Download();
+            //Download();
             var matches = Read();
 
+            Console.WriteLine();
+            Console.WriteLine();
             foreach (var matchType in Enum.GetValues(typeof(MatchType)).Cast<MatchType>())
             {
                 Console.WriteLine($"{matchType}: {matches.Count(m => m.Type == matchType)}");
+            }
+
+            Console.WriteLine();
+            foreach (var matchGroupGroup in matches
+                .Where(m => m.Type != MatchType.Other)
+                .GroupBy(m => Enum.GetValues(typeof(Team)).Cast<Team>()
+                    .Select(t => m.PlayerResults
+                        .Where(pr => pr.Team == t)
+                        .Select(pr => pr.Player.Nickname)
+                        .OrderBy(p => p)
+                        .ToList())
+                    .Select(t => (Count: t.Count, Key: t.StringJoin(" - ")))
+                    .OrderBy(t => t.Count)
+                    .ThenBy(t => t.Key)
+                    .Select(t => t.Key)
+                    .StringJoin(" vs "))
+                .OrderBy(mg => mg.Key)
+                .GroupBy(mg => mg.First().Type)
+                .OrderBy(mgg => mgg.Key))
+            {
+                Console.WriteLine();
+                Console.WriteLine(matchGroupGroup.Key);
+                foreach (var matchGroup in matchGroupGroup)
+                {
+                    Console.WriteLine($"{matchGroup.Key} -> {matchGroup.Count()} matches");
+                }
             }
         }
 

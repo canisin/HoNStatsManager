@@ -43,5 +43,10 @@ namespace HonStatsManager
         {
             return seq.Except((IEnumerable<T>) items);
         }
+
+        public static string StringJoin<T>(this IEnumerable<T> seq, string separator)
+        {
+            return string.Join(separator, seq);
+        }
     }
 }
