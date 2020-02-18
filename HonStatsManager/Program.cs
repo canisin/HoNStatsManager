@@ -16,6 +16,7 @@ namespace HonStatsManager
         private static void MainImpl(string[] args)
         {
             var matchHistory = Honzor.GetMatchHistory();
+            matchHistory = matchHistory.SkipWhile(m => m.Date < DateTime.Parse("2015-05-05")).ToMatchHistory();
             var matches = HonApi.GetMultiMatch(matchHistory).ToList();
 
             foreach (var matchType in Enum.GetValues(typeof(MatchType)).Cast<MatchType>())
