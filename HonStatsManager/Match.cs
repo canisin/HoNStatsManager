@@ -13,22 +13,17 @@ namespace HonStatsManager
         public List<PlayerResult> PlayerResults { get; }
         public MatchType Type { get; }
 
-        public Match(string id, JArray apiResponse)
+        public Match(string id, JToken token)
         {
-            var settings = apiResponse[0].Single(id.CheckMatchId);
-            var inventories = apiResponse[1].Where(id.CheckMatchId);
-            var statistics = apiResponse[2].Where(id.CheckMatchId);
-            var summary = apiResponse[3].Single(id.CheckMatchId);
+            var settings = token[0].Single(id.CheckMatchId);
+            var inventories = token[1].Where(id.CheckMatchId);
+            var statistics = token[2].Where(id.CheckMatchId);
+            var summary = token[3].Single(id.CheckMatchId);
 
             Id = id;
             Date = (DateTime) summary["mdt"];
             Duration = TimeSpan.FromSeconds((int) summary["time_played"]);
-            PlayerResults = statistics.Select(jPlayer => new PlayerResult(
-                new Player(
-                    (string) jPlayer["account_id"],
-                    (string) jPlayer["nickname"]),
-                ((int) jPlayer["team"]).ToTeam()
-            )).ToList();
+            PlayerResults = statistics.Select(t => new PlayerResult(t)).ToList();
 
             Type = this.GetMatchType();
         }

@@ -1,4 +1,6 @@
-﻿namespace HonStatsManager
+﻿using Newtonsoft.Json.Linq;
+
+namespace HonStatsManager
 {
     internal class Player
     {
@@ -9,6 +11,12 @@
         {
             AccountId = accountId;
             Nickname = nickname;
+        }
+
+        public Player(JToken token)
+        {
+            AccountId = (string) token["account_id"];
+            Nickname = (string) token["nickname"];
         }
     }
 }

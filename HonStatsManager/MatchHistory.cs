@@ -7,9 +7,9 @@ namespace HonStatsManager
 {
     internal class MatchHistory : List<(string Id, DateTime Date)>
     {
-        public MatchHistory(JArray apiResponse)
+        public MatchHistory(JToken token)
         {
-            AddRange(((string) apiResponse[0]["history"])
+            AddRange(((string) token[0]["history"])
                 .Split(',')
                 .Select(item => item.Split('|'))
                 .Select(item => (

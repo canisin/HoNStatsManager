@@ -1,14 +1,16 @@
-﻿namespace HonStatsManager
+﻿using Newtonsoft.Json.Linq;
+
+namespace HonStatsManager
 {
     internal class PlayerResult
     {
         public Player Player { get; }
         public Team Team { get; }
 
-        public PlayerResult(Player player, Team team)
+        public PlayerResult(JToken token)
         {
-            Player = player;
-            Team = team;
+            Player = new Player(token);
+            Team = ((int) token["team"]).ToTeam();
         }
     }
 }
