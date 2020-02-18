@@ -25,20 +25,20 @@ namespace HonStatsManager
             return new MatchHistory(response);
         }
 
-        public static IEnumerable<Match> GetMultiMatch(List<string> matchIds)
+        public static IEnumerable<Match> GetMultiMatch(MatchHistory matchHistory)
         {
-            Logger.Log($"Querying {matchIds.Count} matches..");
+            Logger.Log($"Querying {matchHistory.Count} matches..");
             var queryCount = 0;
             var stopWatch = Stopwatch.StartNew();
 
-            foreach (var bucket in matchIds.SplitBy(MultiMatchBucketCount))
+            foreach (var bucket in matchHistory.SplitBy(MultiMatchBucketCount))
             {
-                var response = (JArray) Get($"multi_match/all/matchids/{string.Join("+", bucket)}");
+                var response = (JArray) Get($"multi_match/all/matchids/{string.Join("+", bucket.Select(m => m.Id))}");
 
                 queryCount += bucket.Count;
                 var currentDuration = stopWatch.Elapsed.TotalSeconds;
-                var estimatedDuration = currentDuration / queryCount * matchIds.Count;
-                Logger.Log($"{queryCount}/{matchIds.Count}" +
+                var estimatedDuration = currentDuration / queryCount * matchHistory.Count;
+                Logger.Log($"{queryCount}/{matchHistory.Count}" +
                            $" - Current duration: {TimeSpan.FromSeconds(currentDuration)}" +
                            $" - Estimated time to complete: {TimeSpan.FromSeconds(estimatedDuration)}");
 
@@ -49,12 +49,12 @@ namespace HonStatsManager
 
                 foreach (var matchId in bucket)
                 {
-                    if (!response.First().Any(matchId.CheckMatchId))
+                    if (!response.First().Any(matchId.Id.CheckMatchId))
                     {
                         continue;
                     }
 
-                    yield return new Match(matchId, response);
+                    yield return new Match(matchId.Id, response);
                 }
             }
         }

@@ -17,9 +17,22 @@ namespace HonStatsManager
                     ParseDate(item.Last()))));
         }
 
+        public MatchHistory(IEnumerable<(string, DateTime)> elements)
+            : base(elements)
+        {
+        }
+
         private static DateTime ParseDate(string value)
         {
             return DateTime.ParseExact(value, "MM/dd/yyyy", null);
+        }
+    }
+
+    internal static class MatchHistoryExtensions
+    {
+        public static MatchHistory ToMatchHistory(this IEnumerable<(string, DateTime)> elements)
+        {
+            return new MatchHistory(elements);
         }
     }
 }

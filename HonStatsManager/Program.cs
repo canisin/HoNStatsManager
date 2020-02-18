@@ -15,18 +15,26 @@ namespace HonStatsManager
 
         private static void MainImpl(string[] args)
         {
-            var matchIds = Honzor.GetMatchHistory();
-            var matches = HonApi.GetMultiMatch(matchIds).ToList();
+            var matchHistory = Honzor.GetMatchHistory();
+            var matches = HonApi.GetMultiMatch(matchHistory).ToList();
 
             foreach (var matchType in Enum.GetValues(typeof(MatchType)).Cast<MatchType>())
             {
                 Console.WriteLine($"{matchType}: {matches.Count(m => m.Type == matchType)}");
             }
 
-            Console.WriteLine($"Match ids: {matchIds.Count}");
+            Console.WriteLine($"Match history: {matchHistory.Count}");
             Console.WriteLine($"Matches: {matches.Count}");
 
             Console.WriteLine($"HonApi rate limit wait count = {HonApi.WaitCount}");
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine($"First match history id and date: {matchHistory.First().Id} - {matchHistory.First().Date}");
+            Console.WriteLine($"Last match history id and date: {matchHistory.Last().Id} - {matchHistory.Last().Date}");
+            Console.WriteLine();
+            Console.WriteLine($"First match id and date: {matches.First().Id} - {matches.First().Date}");
+            Console.WriteLine($"Last match id and date: {matches.Last().Id} - {matches.Last().Date}");
         }
     }
 }
