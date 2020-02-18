@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace HonStatsManager
 {
@@ -15,27 +18,38 @@ namespace HonStatsManager
 
         private static void MainImpl(string[] args)
         {
-            var matchHistory = Honzor.GetMatchHistory();
-            matchHistory = matchHistory.SkipWhile(m => m.Date < DateTime.Parse("2015-05-05")).ToMatchHistory();
-            var matches = HonApi.GetMultiMatch(matchHistory).ToList();
+            Download();
+            var matches = Read();
 
             foreach (var matchType in Enum.GetValues(typeof(MatchType)).Cast<MatchType>())
             {
                 Console.WriteLine($"{matchType}: {matches.Count(m => m.Type == matchType)}");
             }
+        }
 
-            Console.WriteLine($"Match history: {matchHistory.Count}");
-            Console.WriteLine($"Matches: {matches.Count}");
+        private const string FileName = @"matches.db";
 
+        private static void Download()
+        {
+            var matchHistory = Honzor.GetMatchHistory();
+            Console.WriteLine($"Total match history: {matchHistory.Count}");
+
+            matchHistory = matchHistory.SkipWhile(m => m.Date < DateTime.Parse("2015-05-05")).ToMatchHistory();
+            Console.WriteLine($"Match history after 2015-05-05: {matchHistory.Count}");
+
+            var matches = HonApi.GetMultiMatch(matchHistory).ToList();
+            Console.WriteLine($"Downloaded matches: {matches.Count}");
             Console.WriteLine($"HonApi rate limit wait count = {HonApi.WaitCount}");
 
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine($"First match history id and date: {matchHistory.First().Id} - {matchHistory.First().Date}");
-            Console.WriteLine($"Last match history id and date: {matchHistory.Last().Id} - {matchHistory.Last().Date}");
-            Console.WriteLine();
-            Console.WriteLine($"First match id and date: {matches.First().Id} - {matches.First().Date}");
+            File.WriteAllText(FileName, JsonConvert.SerializeObject(matches));
+        }
+
+        private static List<Match> Read()
+        {
+            var matches = JsonConvert.DeserializeObject<List<Match>>(File.ReadAllText(FileName));
+            Console.WriteLine($"Matches read from file: {matches.Count}");
             Console.WriteLine($"Last match id and date: {matches.Last().Id} - {matches.Last().Date}");
+            return matches;
         }
     }
 }

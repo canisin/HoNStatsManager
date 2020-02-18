@@ -4,8 +4,12 @@ namespace HonStatsManager
 {
     internal class Player
     {
-        public string AccountId { get; }
-        public string Nickname { get; }
+        public string AccountId { get; set; }
+        public string Nickname { get; set; }
+
+        public Player()
+        {
+        }
 
         public Player(string accountId, string nickname)
         {

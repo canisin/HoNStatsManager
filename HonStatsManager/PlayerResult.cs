@@ -4,8 +4,12 @@ namespace HonStatsManager
 {
     internal class PlayerResult
     {
-        public Player Player { get; }
-        public Team Team { get; }
+        public Player Player { get; set; }
+        public Team Team { get; set; }
+
+        public PlayerResult()
+        {
+        }
 
         public PlayerResult(JToken token)
         {
