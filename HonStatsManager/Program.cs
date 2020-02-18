@@ -53,6 +53,64 @@ namespace HonStatsManager
                     Console.WriteLine($"{matchGroup.Key} -> {matchGroup.Count()} matches");
                 }
             }
+
+            Console.WriteLine();
+            Console.WriteLine();
+            foreach (var match in matches)
+            {
+                foreach (var playerResult in match.PlayerResults)
+                {
+                    if (playerResult.Wins > 1)
+                    {
+                        Console.WriteLine(
+                            $"matchid: {match.Id}, nickname: {playerResult.Player.Nickname}, wins: {playerResult.Wins}");
+                    }
+
+                    if (playerResult.Losses > 1)
+                    {
+                        Console.WriteLine(
+                            $"matchid: {match.Id}, nickname: {playerResult.Player.Nickname}, losses: {playerResult.Losses}");
+                    }
+
+                    if (playerResult.Concedes > 1)
+                    {
+                        Console.WriteLine(
+                            $"matchid: {match.Id}, nickname: {playerResult.Player.Nickname}, concedes: {playerResult.Concedes}");
+                    }
+
+                    if (playerResult.Discos > 1)
+                    {
+                        Console.WriteLine(
+                            $"matchid: {match.Id}, nickname: {playerResult.Player.Nickname}, discos: {playerResult.Discos}");
+                    }
+
+                    if (playerResult.Kicked > 1)
+                    {
+                        Console.WriteLine(
+                            $"matchid: {match.Id}, nickname: {playerResult.Player.Nickname}, kicked: {playerResult.Kicked}");
+                    }
+
+                    if (playerResult.Wins + playerResult.Losses + playerResult.Concedes + playerResult.Discos +
+                        playerResult.Kicked != 1)
+                    {
+                        Console.WriteLine(
+                            $"matchid: {match.Id}, nickname: {playerResult.Player.Nickname}, " +
+                            $" wins: {playerResult.Wins}" +
+                            $" losses: {playerResult.Losses}" +
+                            $" concedes: {playerResult.Concedes}" +
+                            $" discos: {playerResult.Discos}" +
+                            $" kicked: {playerResult.Kicked}");
+                    }
+
+                    if (playerResult.Wins + playerResult.Losses != 1)
+                    {
+                        Console.WriteLine(
+                            $"matchid: {match.Id}, nickname: {playerResult.Player.Nickname}, " +
+                            $" wins: {playerResult.Wins}" +
+                            $" losses: {playerResult.Losses}");
+                    }
+                }
+            }
         }
 
         private const string FileName = @"matches.db";
