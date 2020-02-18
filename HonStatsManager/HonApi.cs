@@ -49,26 +49,12 @@ namespace HonStatsManager
 
                 foreach (var matchId in bucket)
                 {
-                    var settings = response[0].SingleOrDefault(token => (string) token["match_id"] == matchId);
-                    if (settings == null)
+                    if (!response.First().Any(matchId.CheckMatchId))
                     {
                         continue;
                     }
 
-                    var inventories = response[1].Where(token => (string) token["match_id"] == matchId);
-                    var statistics = response[2].Where(token => (string) token["match_id"] == matchId);
-                    var summary = response[3].Single(token => (string) token["match_id"] == matchId);
-
-                    yield return new Match(
-                        matchId,
-                        (DateTime) summary["mdt"],
-                        TimeSpan.FromSeconds((int) summary["time_played"]),
-                        statistics.Select(jPlayer => new PlayerResult(
-                            new Player(
-                                (string) jPlayer["account_id"],
-                                (string) jPlayer["nickname"]),
-                            ((int) jPlayer["team"]).ToTeam()
-                        )).ToList());
+                    yield return new Match(matchId, response);
                 }
             }
         }
