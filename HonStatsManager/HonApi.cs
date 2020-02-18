@@ -17,13 +17,12 @@ namespace HonStatsManager
         private const int MultiMatchBucketCount = 25;
         private const int RateLimitWait = 1000;
 
-        public static List<(string Id, DateTime Date)> GetMatchHistory(Player player)
+        public static MatchHistory GetMatchHistory(Player player)
         {
             Logger.Log($"Getting match history for {player.Nickname}");
 
             var response = (JArray) Get($"match_history/public/accountid/{player.AccountId}");
-            var history = ((string) response[0]["history"]).Split(',').Select(item => item.Split('|'));
-            return history.Select(item => (item.First(), DateTime.ParseExact(item.Last(), "MM/dd/yyyy", null))).ToList();
+            return new MatchHistory(response);
         }
 
         public static IEnumerable<Match> GetMultiMatch(List<string> matchIds)
