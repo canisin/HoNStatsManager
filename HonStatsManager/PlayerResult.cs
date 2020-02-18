@@ -6,11 +6,11 @@ namespace HonStatsManager
     {
         public Player Player { get; set; }
         public Team Team { get; set; }
-        public int Wins { get; set; }
-        public int Losses { get; set; }
-        public int Concedes { get; set; }
-        public int Discos { get; set; }
-        public int Kicked { get; set; }
+        public bool Wins { get; set; }
+        public bool Losses { get; set; }
+        public bool Concedes { get; set; }
+        public bool Discos { get; set; }
+        public bool Kicked { get; set; }
 
         public PlayerResult()
         {
@@ -20,11 +20,11 @@ namespace HonStatsManager
         {
             Player = new Player(token);
             Team = ((int) token["team"]).ToTeam();
-            Wins = (int) token["wins"];
-            Losses = (int) token["losses"];
-            Concedes = (int) token["concedes"];
-            Discos = (int) token["discos"];
-            Kicked = (int) token["kicked"];
+            Wins = (int) token["wins"] != 0;
+            Losses = (int) token["losses"] != 0;
+            Concedes = (int) token["concedes"] != 0;
+            Discos = (int) token["discos"] != 0;
+            Kicked = (int) token["kicked"] != 0;
         }
     }
 }
