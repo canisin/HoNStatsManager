@@ -33,19 +33,13 @@ namespace HonStatsManager
         public static IEnumerable<Match> GetMultiMatch(MatchHistory matchHistory)
         {
             Logger.Log($"Querying {matchHistory.Count} matches..");
-            var queryCount = 0;
-            var stopWatch = Stopwatch.StartNew();
+            var timer = new MultiMatchQueryTimer(matchHistory.Count);
 
             foreach (var bucket in matchHistory.SplitBy(MultiMatchBucketCount))
             {
                 var response = (JArray) Get($"multi_match/all/matchids/{string.Join("+", bucket.Select(m => m.Id))}");
 
-                queryCount += bucket.Count;
-                var currentDuration = stopWatch.Elapsed.TotalSeconds;
-                var estimatedDuration = currentDuration / queryCount * matchHistory.Count;
-                Logger.Log($"{queryCount}/{matchHistory.Count}" +
-                           $" - Current duration: {TimeSpan.FromSeconds(currentDuration)}" +
-                           $" - Estimated time to complete: {TimeSpan.FromSeconds(estimatedDuration)}");
+                timer.Update(bucket.Count);
 
                 if (response == null)
                 {
@@ -61,6 +55,32 @@ namespace HonStatsManager
 
                     yield return new Match(matchId, response);
                 }
+            }
+        }
+
+        private class MultiMatchQueryTimer
+        {
+            private readonly Stopwatch _timer;
+            private readonly int _totalCount;
+            private int _queryCount;
+
+            public MultiMatchQueryTimer(int totalCount)
+            {
+                _totalCount = totalCount;
+                _queryCount = 0;
+
+                _timer = Stopwatch.StartNew();
+            }
+
+            public void Update(int bucketCount)
+            {
+                _queryCount += bucketCount;
+
+                var currentDuration = _timer.Elapsed.TotalSeconds;
+                var estimatedDuration = currentDuration / _queryCount * _totalCount;
+                Logger.Log($"{_queryCount}/{_totalCount}" +
+                           $" - Current duration: {TimeSpan.FromSeconds(currentDuration)}" +
+                           $" - Estimated time to complete: {TimeSpan.FromSeconds(estimatedDuration)}");
             }
         }
 
