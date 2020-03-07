@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace HonStatsManager
 {
@@ -18,8 +15,10 @@ namespace HonStatsManager
 
         private static void MainImpl(string[] args)
         {
-            Download();
-            var matches = Read();
+            var matchDb = new MatchDb();
+            matchDb.Download();
+            //matchDb.Read();
+            var matches = matchDb.Matches;
 
             Console.WriteLine();
             Console.WriteLine();
@@ -56,28 +55,6 @@ namespace HonStatsManager
                     Console.WriteLine($"{team2}: {team2Wins} wins ({team2Ratio:P})");
                 }
             }
-        }
-
-        private const string FileName = @"matches.db";
-
-        private static void Download()
-        {
-            var matchHistory = Honzor.GetMatchHistory();
-            Console.WriteLine($"Total match history: {matchHistory.Count}");
-
-            var matches = HonApi.GetMultiMatch(matchHistory).ToList();
-            Console.WriteLine($"Downloaded matches: {matches.Count}");
-            Console.WriteLine($"HonApi rate limit wait count = {HonApi.WaitCount}");
-
-            File.WriteAllText(FileName, JsonConvert.SerializeObject(matches));
-        }
-
-        private static List<Match> Read()
-        {
-            var matches = JsonConvert.DeserializeObject<List<Match>>(File.ReadAllText(FileName));
-            Console.WriteLine($"Matches read from file: {matches.Count}");
-            Console.WriteLine($"Last match id and date: {matches.Last().Id} - {matches.Last().Date}");
-            return matches;
         }
     }
 }
