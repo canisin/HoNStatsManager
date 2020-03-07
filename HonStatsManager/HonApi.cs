@@ -20,17 +20,16 @@ namespace HonStatsManager
         private const int MultiMatchBucketCount = 25;
         private const int RateLimitWait = 1000;
 
-        public static MatchHistory GetMatchHistory(Player player)
+        public static IEnumerable<MatchRecord> GetMatchHistory(Player player)
         {
             Logger.Log($"Getting match history for {player.Nickname}");
 
             var response = (JArray) Get($"match_history/public/accountid/{player.AccountId}");
-            return new MatchHistory(response)
-                .SkipWhile(m => m.Date < StatsEpoch)
-                .ToMatchHistory();
+            return MatchHistory.Parse(response)
+                .SkipWhile(m => m.Date < StatsEpoch);
         }
 
-        public static IEnumerable<Match> GetMultiMatch(MatchHistory matchHistory)
+        public static IEnumerable<Match> GetMultiMatch(List<MatchRecord> matchHistory)
         {
             Logger.Log($"Querying {matchHistory.Count} matches..");
             var timer = new MultiMatchQueryTimer(matchHistory.Count);
@@ -46,14 +45,14 @@ namespace HonStatsManager
                     continue;
                 }
 
-                foreach (var (matchId, _) in bucket)
+                foreach (var matchRecord in bucket)
                 {
-                    if (!response.First().Any(matchId.CheckMatchId))
+                    if (!response.First().Any(matchRecord.Id.CheckMatchId))
                     {
                         continue;
                     }
 
-                    yield return new Match(matchId, response);
+                    yield return new Match(matchRecord.Id, response);
                 }
             }
         }

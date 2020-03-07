@@ -22,13 +22,13 @@ namespace HonStatsManager
             return player.AccountId.In(Players.Select(p => p.AccountId));
         }
 
-        public static MatchHistory GetMatchHistory()
+        public static List<MatchRecord> GetMatchHistory()
         {
             return Players
                 .SelectMany(HonApi.GetMatchHistory)
                 .Distinct()
                 .OrderBy(m => m.Date)
-                .ToMatchHistory();
+                .ToList();
         }
     }
 }

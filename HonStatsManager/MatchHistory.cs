@@ -5,34 +5,29 @@ using Newtonsoft.Json.Linq;
 
 namespace HonStatsManager
 {
-    internal class MatchHistory : List<(string Id, DateTime Date)>
+    internal class MatchRecord
     {
-        public MatchHistory(JToken token)
+        public string Id;
+        public DateTime Date;
+    }
+
+    internal static class MatchHistory
+    {
+        public static IEnumerable<MatchRecord> Parse(JToken token)
         {
-            AddRange(((string) token[0]["history"])
+            return ((string) token[0]["history"])
                 .Split(',')
                 .Select(item => item.Split('|'))
-                .Select(item => (
-                    item.First(),
-                    ParseDate(item.Last()))));
-        }
-
-        public MatchHistory(IEnumerable<(string, DateTime)> elements)
-            : base(elements)
-        {
+                .Select(item => new MatchRecord
+                {
+                    Id = item.First(),
+                    Date = ParseDate(item.Last())
+                });
         }
 
         private static DateTime ParseDate(string value)
         {
             return DateTime.ParseExact(value, "MM/dd/yyyy", null);
-        }
-    }
-
-    internal static class MatchHistoryExtensions
-    {
-        public static MatchHistory ToMatchHistory(this IEnumerable<(string, DateTime)> elements)
-        {
-            return new MatchHistory(elements);
         }
     }
 }
