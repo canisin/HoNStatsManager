@@ -18,7 +18,7 @@ namespace HonStatsManager
 
         private static void MainImpl(string[] args)
         {
-            //Download();
+            Download();
             var matches = Read();
 
             Console.WriteLine();
@@ -64,9 +64,6 @@ namespace HonStatsManager
         {
             var matchHistory = Honzor.GetMatchHistory();
             Console.WriteLine($"Total match history: {matchHistory.Count}");
-
-            matchHistory = matchHistory.SkipWhile(m => m.Date < DateTime.Parse("2015-05-05")).ToMatchHistory();
-            Console.WriteLine($"Match history after 2015-05-05: {matchHistory.Count}");
 
             var matches = HonApi.GetMultiMatch(matchHistory).ToList();
             Console.WriteLine($"Downloaded matches: {matches.Count}");

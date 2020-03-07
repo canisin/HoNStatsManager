@@ -14,6 +14,9 @@ namespace HonStatsManager
     {
         public static readonly string BaseUrl = @"http://api.heroesofnewerth.com";
         public static readonly string Token = @"?token=0C0JQEHC8VZW5KFK";
+
+        public static readonly DateTime StatsEpoch = DateTime.Parse("2015-05-05");
+
         private const int MultiMatchBucketCount = 25;
         private const int RateLimitWait = 1000;
 
@@ -22,7 +25,9 @@ namespace HonStatsManager
             Logger.Log($"Getting match history for {player.Nickname}");
 
             var response = (JArray) Get($"match_history/public/accountid/{player.AccountId}");
-            return new MatchHistory(response);
+            return new MatchHistory(response)
+                .SkipWhile(m => m.Date < StatsEpoch)
+                .ToMatchHistory();
         }
 
         public static IEnumerable<Match> GetMultiMatch(MatchHistory matchHistory)
@@ -47,14 +52,14 @@ namespace HonStatsManager
                     continue;
                 }
 
-                foreach (var matchId in bucket)
+                foreach (var (matchId, _) in bucket)
                 {
-                    if (!response.First().Any(matchId.Id.CheckMatchId))
+                    if (!response.First().Any(matchId.CheckMatchId))
                     {
                         continue;
                     }
 
-                    yield return new Match(matchId.Id, response);
+                    yield return new Match(matchId, response);
                 }
             }
         }
