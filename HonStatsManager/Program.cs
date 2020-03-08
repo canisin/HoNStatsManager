@@ -15,9 +15,7 @@ namespace HonStatsManager
 
         private static void MainImpl(string[] args)
         {
-            var matchDb = new MatchDb();
-            matchDb.Download();
-            //matchDb.Read();
+            var matchDb = MatchDb.FromUpdate();
             var matches = matchDb.Matches;
 
             Console.WriteLine();

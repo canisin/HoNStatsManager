@@ -29,10 +29,12 @@ namespace HonStatsManager
                 .SkipWhile(m => m.Date < StatsEpoch);
         }
 
-        public static IEnumerable<Match> GetMultiMatch(List<MatchRecord> matchHistory)
+        public static IEnumerable<Match> GetMultiMatch(IEnumerable<MatchRecord> matchHistory)
         {
-            Logger.Log($"Querying {matchHistory.Count} matches..");
-            var timer = new MultiMatchQueryTimer(matchHistory.Count);
+            matchHistory = matchHistory as List<MatchRecord> ?? matchHistory.ToList();
+
+            Logger.Log($"Querying {matchHistory.Count()} matches..");
+            var timer = new MultiMatchQueryTimer(matchHistory.Count());
 
             foreach (var bucket in matchHistory.SplitBy(MultiMatchBucketCount))
             {
@@ -55,11 +57,15 @@ namespace HonStatsManager
                     yield return new Match(matchRecord.Id, response);
                 }
             }
+
+            Console.WriteLine($"Queried {matchHistory.Count()} matches in {timer.Timer.Elapsed}.");
+            Console.WriteLine($"HonApi rate limit wait count = {WaitCount}");
         }
 
         private class MultiMatchQueryTimer
         {
-            private readonly Stopwatch _timer;
+            public Stopwatch Timer { get; }
+
             private readonly int _totalCount;
             private int _queryCount;
 
@@ -68,14 +74,14 @@ namespace HonStatsManager
                 _totalCount = totalCount;
                 _queryCount = 0;
 
-                _timer = Stopwatch.StartNew();
+                Timer = Stopwatch.StartNew();
             }
 
             public void Update(int bucketCount)
             {
                 _queryCount += bucketCount;
 
-                var currentDuration = _timer.Elapsed.TotalSeconds;
+                var currentDuration = Timer.Elapsed.TotalSeconds;
                 var estimatedDuration = currentDuration / _queryCount * _totalCount;
                 Logger.Log($"{_queryCount}/{_totalCount}" +
                            $" - Current duration: {TimeSpan.FromSeconds(currentDuration)}" +
@@ -94,7 +100,7 @@ namespace HonStatsManager
             return JsonConvert.DeserializeObject(GetRaw(parameters));
         }
 
-        public static int WaitCount { get; private set; }
+        private static int WaitCount { get; set; }
 
         private static string GetRaw(string parameters)
         {
