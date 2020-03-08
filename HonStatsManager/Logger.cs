@@ -3,22 +3,24 @@ using System.IO;
 
 namespace HonStatsManager
 {
+    [Flags]
     internal enum LogTarget
     {
-        Console,
-        File,
-        None
+        None = 0,
+        Console = 1,
+        File = 2,
+        Both = Console | File
     }
 
     internal static class Logger
     {
-        public static readonly LogTarget Target = LogTarget.Console;
+        public static readonly LogTarget Target = LogTarget.Both;
 
         public static readonly string FileName = @"log.txt";
 
         static Logger()
         {
-            if (Target == LogTarget.File)
+            if (Target.HasFlag(LogTarget.File))
                 File.Delete(FileName);
 
             Log($"Hon Stats Manager - {DateTime.Now}");
@@ -29,19 +31,11 @@ namespace HonStatsManager
 
         public static void Log(object log)
         {
-            switch (Target)
-            {
-                case LogTarget.Console:
-                    Console.WriteLine(log);
-                    break;
-                case LogTarget.File:
-                    File.AppendAllLines(FileName, new[] {log.ToString()});
-                    break;
-                case LogTarget.None:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            if (Target.HasFlag(LogTarget.Console))
+                Console.WriteLine(log);
+
+            if (Target.HasFlag(LogTarget.File))
+                File.AppendAllLines(FileName, new[] {log.ToString()});
         }
     }
 }
