@@ -58,8 +58,8 @@ namespace HonStatsManager
                 }
             }
 
-            Console.WriteLine($"Queried {matchHistory.Count()} matches in {timer.Timer.Elapsed}.");
-            Console.WriteLine($"HonApi rate limit wait count = {WaitCount}");
+            Logger.Log($"Queried {matchHistory.Count()} matches in {timer.Timer.Elapsed}.");
+            Logger.Log($"HonApi rate limit wait count = {WaitCount}");
         }
 
         private class MultiMatchQueryTimer

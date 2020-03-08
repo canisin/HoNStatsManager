@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -40,8 +39,8 @@ namespace HonStatsManager
         {
             _matches = JsonConvert.DeserializeObject<List<Match>>(File.ReadAllText(FileName));
 
-            Console.WriteLine($"Matches read from file: {_matches.Count}");
-            Console.WriteLine($"Last match id and date: {_matches.Last().Id} - {_matches.Last().Date}");
+            Logger.Log($"Matches read from file: {_matches.Count}");
+            Logger.Log($"Last match id and date: {_matches.Last().Id} - {_matches.Last().Date}");
         }
 
         public void Download()
@@ -54,19 +53,19 @@ namespace HonStatsManager
 
             if (!matchHistory.Any())
             {
-                Console.WriteLine(lastKnownDate.HasValue
+                Logger.Log(lastKnownDate.HasValue
                     ? $"No new matches since {lastKnownDate}."
                     : "No matches found.");
 
                 return;
             }
 
-            Console.WriteLine($"Found {matchHistory.Count} {(lastKnownDate.HasValue ? "new" : "")} matches.");
+            Logger.Log($"Found {matchHistory.Count} {(lastKnownDate.HasValue ? "new" : "")} matches.");
 
             var matches = HonApi.GetMultiMatch(matchHistory).ToList();
 
-            Console.WriteLine($"Matches downloaded: {matches.Count}");
-            Console.WriteLine($"Last match id and date: {matches.Last().Id} - {matches.Last().Date}");
+            Logger.Log($"Matches downloaded: {matches.Count}");
+            Logger.Log($"Last match id and date: {matches.Last().Id} - {matches.Last().Date}");
 
             if (_matches.Any())
                 File.AppendAllText(FileName, JsonConvert.SerializeObject(matches));
