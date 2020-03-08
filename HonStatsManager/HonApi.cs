@@ -26,7 +26,7 @@ namespace HonStatsManager
 
             var response = (JArray) Get($"match_history/public/accountid/{player.AccountId}");
             return MatchHistory.Parse(response)
-                .SkipWhile(m => m.Date < StatsEpoch);
+                .Where(m => m.Date >= StatsEpoch);
         }
 
         public static IEnumerable<Match> GetMultiMatch(IEnumerable<MatchRecord> matchHistory)

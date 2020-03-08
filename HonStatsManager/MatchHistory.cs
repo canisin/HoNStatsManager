@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace HonStatsManager
 {
-    internal class MatchRecord
+    internal struct MatchRecord
     {
         public string Id;
         public DateTime Date;
