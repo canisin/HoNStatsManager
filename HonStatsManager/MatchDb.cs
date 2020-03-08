@@ -45,7 +45,7 @@ namespace HonStatsManager
 
         public void Download()
         {
-            var lastKnownDate = _matches.LastOrDefault()?.Date;
+            var lastKnownDate = _matches?.LastOrDefault()?.Date;
 
             var matchHistory = Honzor.GetMatchHistory()
                 .SkipWhile(m => m.Date < lastKnownDate)
@@ -67,12 +67,16 @@ namespace HonStatsManager
             Logger.Log($"Matches downloaded: {matches.Count}");
             Logger.Log($"Last match id and date: {matches.Last().Id} - {matches.Last().Date}");
 
-            if (_matches.Any())
+            if (_matches?.Any() == true)
+            {
+                _matches.AddRange(matches);
                 File.AppendAllText(FileName, JsonConvert.SerializeObject(matches));
+            }
             else
+            {
+                _matches = matches;
                 File.WriteAllText(FileName, JsonConvert.SerializeObject(matches));
-
-            _matches.AddRange(matches);
+            }
         }
     }
 }
