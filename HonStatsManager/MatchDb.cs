@@ -35,7 +35,7 @@ namespace HonStatsManager
                 Write();
         }
 
-        public static void Read()
+        private static void Read()
         {
             if (!File.Exists(FileName))
             {
@@ -51,7 +51,7 @@ namespace HonStatsManager
             MatchesStore.AddRange(matches);
         }
 
-        public static void Download()
+        private static void Download()
         {
             var lastKnownDate = MatchesStore.LastOrDefault()?.Date;
 
@@ -78,7 +78,7 @@ namespace HonStatsManager
             MatchesStore.AddRange(matches);
         }
 
-        public static void Write()
+        private static void Write()
         {
             if (!MatchesStore.Any())
             {

@@ -21,15 +21,6 @@ namespace HonStatsManager
             Read();
         }
 
-        public static void InitializeFromDiskWithUpdate(bool save = true)
-        {
-            Read();
-            Download();
-
-            if (save)
-                Write();
-        }
-
         public static void InitializeFromWeb(bool save = true)
         {
             Download();
@@ -38,7 +29,7 @@ namespace HonStatsManager
                 Write();
         }
 
-        public static void Read()
+        private static void Read()
         {
             if (!File.Exists(FileName))
             {
@@ -53,7 +44,7 @@ namespace HonStatsManager
             HeroDict.AddRange(heroes.ToKeyValuePairs(hero => hero.Id));
         }
 
-        public static void Download()
+        private static void Download()
         {
             using (var client = new WebClient())
             {
@@ -67,11 +58,11 @@ namespace HonStatsManager
 
                 Logger.Log($"Heroes downloaded: {heroes.Count}");
 
-                HeroDict.AddRange(heroes.ToKeyValuePairs(hero => hero.Id)); //todo unique
+                HeroDict.AddRange(heroes.ToKeyValuePairs(hero => hero.Id));
             }
         }
 
-        public static void Write()
+        private static void Write()
         {
             if (!HeroDict.Any())
             {
