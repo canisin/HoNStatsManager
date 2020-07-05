@@ -25,7 +25,7 @@ namespace HonStatsManager
             var summary = token[3].Single(id.CheckMatchId);
 
             Id = id;
-            Date = (DateTime) summary["mdt"];
+            Date = TimeZoneInfo.ConvertTimeToUtc((DateTime) summary["mdt"], HonApi.TimeZone);
             Duration = TimeSpan.FromSeconds((int) summary["time_played"]);
             PlayerResults = statistics.Select(t => new PlayerResult(t)).ToList();
 

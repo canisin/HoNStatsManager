@@ -17,6 +17,9 @@ namespace HonStatsManager
 
         public static readonly DateTime StatsEpoch = DateTime.Parse("2015-05-05");
 
+        public static readonly TimeZoneInfo TimeZone =
+            TimeZoneInfo.CreateCustomTimeZone("hon", TimeSpan.FromHours(-5), "hon", "hon");
+
         private const int MultiMatchBucketCount = 25;
         private const int RateLimitWait = 1000;
 
