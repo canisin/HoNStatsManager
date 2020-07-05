@@ -15,14 +15,7 @@ namespace HonStatsManager
 
         private static void MainImpl(string[] args)
         {
-            HeroDb.InitializeFromWeb(false);
-            foreach (var hero in HeroDb.Heroes)
-            {
-                Console.WriteLine($"{hero.Id}: {hero.Name}");
-            }
-
-            return;
-
+            HeroDb.InitializeFromDisk();
             MatchDb.InitializeFromDisk();
             var matches = MatchDb.Matches;
 

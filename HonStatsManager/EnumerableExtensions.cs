@@ -48,5 +48,26 @@ namespace HonStatsManager
         {
             return string.Join(separator, seq);
         }
+
+        public static IEnumerable<KeyValuePair<TKey, TSource>> ToKeyValuePairs<TSource, TKey>(
+            this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            return source.ToKeyValuePairs(keySelector, item => item);
+        }
+
+        public static IEnumerable<KeyValuePair<TKey, TValue>> ToKeyValuePairs<TSource, TKey, TValue>(
+            this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TValue> valueSelector)
+        {
+            return source.Select(item => new KeyValuePair<TKey, TValue>(keySelector(item), valueSelector(item)));
+        }
+
+        public static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> dictionary,
+            IEnumerable<KeyValuePair<TKey, TValue>> seq)
+        {
+            foreach (var keyValuePair in seq)
+            {
+                dictionary.Add(keyValuePair.Key, keyValuePair.Value);
+            }
+        }
     }
 }

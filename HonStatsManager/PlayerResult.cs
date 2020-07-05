@@ -6,7 +6,7 @@ namespace HonStatsManager
     {
         public Player Player { get; set; }
         public Team Team { get; set; }
-        public string Hero { get; set; }
+        public Hero Hero { get; set; }
         public bool Wins { get; set; }
         public bool Losses { get; set; }
         public bool Concedes { get; set; }
@@ -21,6 +21,7 @@ namespace HonStatsManager
         {
             Player = new Player(token);
             Team = ((int) token["team"]).ToTeam();
+            Hero = HeroDb.HeroDict[(string) token["hero_id"]];
             Wins = (int) token["wins"] != 0;
             Losses = (int) token["losses"] != 0;
             Concedes = (int) token["concedes"] != 0;
