@@ -16,7 +16,7 @@ namespace HonStatsManager
     {
         public static readonly LogTarget Target = LogTarget.Both;
 
-        public static readonly string FileName = @"log.txt";
+        public const string FileName = @"log.txt";
 
         static Logger()
         {

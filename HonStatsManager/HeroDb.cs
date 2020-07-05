@@ -9,6 +9,7 @@ namespace HonStatsManager
 {
     internal class HeroDb
     {
+        public const string Url = @"http://www.heroesofnewerth.com/heroes/";
         public const string FileName = @"heroes.db";
 
         public IReadOnlyList<Hero> Heroes => _heroes.AsReadOnly();
@@ -64,8 +65,7 @@ namespace HonStatsManager
         {
             using (var client = new WebClient())
             {
-                const string url = @"http://www.heroesofnewerth.com/heroes/";
-                var content = client.DownloadString(url);
+                var content = client.DownloadString(Url);
 
                 var regex = new Regex(@"""/heroes/view/(\d+)/(.*?)""");
                 var heroes = regex.Matches(content)

@@ -12,8 +12,8 @@ namespace HonStatsManager
 {
     internal static class HonApi
     {
-        public static readonly string BaseUrl = @"http://api.heroesofnewerth.com";
-        public static readonly string Token = @"?token=0C0JQEHC8VZW5KFK";
+        public const string BaseUrl = @"http://api.heroesofnewerth.com";
+        public const string Token = @"?token=0C0JQEHC8VZW5KFK";
 
         public static readonly DateTime StatsEpoch = DateTime.Parse("2015-05-05");
 
