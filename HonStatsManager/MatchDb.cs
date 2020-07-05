@@ -11,7 +11,7 @@ namespace HonStatsManager
 
         public IReadOnlyList<Match> Matches => _matches.AsReadOnly();
 
-        private List<Match> _matches;
+        private readonly List<Match> _matches = new List<Match>();
 
         public static MatchDb FromDisk()
         {
@@ -20,32 +20,48 @@ namespace HonStatsManager
             return matchDb;
         }
 
-        public static MatchDb FromUpdate()
+        public static MatchDb FromDiskWithUpdate(bool save = true)
         {
             var matchDb = new MatchDb();
             matchDb.Read();
             matchDb.Download();
+
+            if (save)
+                matchDb.Write();
+
             return matchDb;
         }
 
-        public static MatchDb FromWeb()
+        public static MatchDb FromWeb(bool save = true)
         {
             var matchDb = new MatchDb();
             matchDb.Download();
+
+            if (save)
+                matchDb.Write();
+
             return matchDb;
         }
 
         public void Read()
         {
-            _matches = JsonConvert.DeserializeObject<List<Match>>(File.ReadAllText(FileName));
+            if (!File.Exists(FileName))
+            {
+                Logger.Log($"{FileName} not found.");
+                return;
+            }
 
-            Logger.Log($"Matches read from file: {_matches.Count}");
-            Logger.Log($"Last match id and date: {_matches.Last().Id} - {_matches.Last().Date}");
+            var matches = JsonConvert.DeserializeObject<List<Match>>(File.ReadAllText(FileName));
+
+            Logger.Log($"Matches read from file: {matches.Count}");
+            Logger.Log($"Last match id and date: {matches.Last().Id} - {matches.Last().Date}");
+
+            _matches.AddRange(matches);
         }
 
         public void Download()
         {
-            var lastKnownDate = _matches?.LastOrDefault()?.Date;
+            var lastKnownDate = _matches.LastOrDefault()?.Date;
 
             var matchHistory = Honzor.GetMatchHistory()
                 .SkipWhile(m => m.Date < lastKnownDate)
@@ -67,16 +83,19 @@ namespace HonStatsManager
             Logger.Log($"Matches downloaded: {matches.Count}");
             Logger.Log($"Last match id and date: {matches.Last().Id} - {matches.Last().Date}");
 
-            if (_matches?.Any() == true)
+            _matches.AddRange(matches);
+        }
+
+        public void Write()
+        {
+            if (!_matches.Any())
             {
-                _matches.AddRange(matches);
-                File.AppendAllText(FileName, JsonConvert.SerializeObject(matches));
+                return;
             }
-            else
-            {
-                _matches = matches;
-                File.WriteAllText(FileName, JsonConvert.SerializeObject(matches));
-            }
+
+            File.WriteAllText(FileName, JsonConvert.SerializeObject(_matches));
+            Logger.Log($"{FileName} saved.");
+            Logger.Log($"{_matches.Count} matches written to disk.");
         }
     }
 }
