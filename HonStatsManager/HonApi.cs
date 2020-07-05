@@ -80,12 +80,12 @@ namespace HonStatsManager
                 Timer = Stopwatch.StartNew();
             }
 
-            public void Update(int bucketCount)
+            public void Update(int updateCount)
             {
-                _queryCount += bucketCount;
+                _queryCount += updateCount;
 
                 var currentDuration = Timer.Elapsed.TotalSeconds;
-                var estimatedDuration = currentDuration / _queryCount * _totalCount;
+                var estimatedDuration = currentDuration / _queryCount * (_totalCount - _queryCount);
                 Logger.Log($"{_queryCount}/{_totalCount}" +
                            $" - Current duration: {TimeSpan.FromSeconds(currentDuration)}" +
                            $" - Estimated time to complete: {TimeSpan.FromSeconds(estimatedDuration)}");
