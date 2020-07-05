@@ -89,6 +89,16 @@ namespace HonStatsManager
             }
         }
 
+        public static Match GetMatch(MatchRecord matchRecord)
+        {
+            var response = (JArray)Get($"match/all/matchid/{matchRecord.Id}");
+
+            if (response == null)
+                return null;
+
+            return new Match(matchRecord.Id, response);
+        }
+
         public static string GetMatchRaw(string matchId)
         {
             Logger.Log($"Getting match raw {matchId}");
