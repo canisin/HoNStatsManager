@@ -28,7 +28,10 @@ namespace HonStatsManager
         {
             Console.WriteLine();
             Console.WriteLine();
-            PrintTitle("Match Counts");
+            PrintTitle("Match Stats");
+            Console.WriteLine($"First Match: {MatchDb.Matches.First().Date}");
+            Console.WriteLine($"Last Match: {MatchDb.Matches.Last().Date}");
+            Console.WriteLine();
             foreach (var matchType in Enum.GetValues(typeof(MatchType)).Cast<MatchType>())
             {
                 Console.WriteLine($"{matchType}: {MatchDb.Matches.Count(m => m.Type == matchType)} matches");
