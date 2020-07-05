@@ -5,45 +5,37 @@ using Newtonsoft.Json;
 
 namespace HonStatsManager
 {
-    internal class MatchDb
+    internal static class MatchDb
     {
         public const string FileName = @"matches.db";
 
-        public IReadOnlyList<Match> Matches => _matches.AsReadOnly();
+        public static IReadOnlyList<Match> Matches => MatchesStore.AsReadOnly();
 
-        private readonly List<Match> _matches = new List<Match>();
+        private static readonly List<Match> MatchesStore = new List<Match>();
 
-        public static MatchDb FromDisk()
+        public static void InitializeFromDisk()
         {
-            var matchDb = new MatchDb();
-            matchDb.Read();
-            return matchDb;
+            Read();
         }
 
-        public static MatchDb FromDiskWithUpdate(bool save = true)
+        public static void InitializeFromDiskWithUpdate(bool save = true)
         {
-            var matchDb = new MatchDb();
-            matchDb.Read();
-            matchDb.Download();
+            Read();
+            Download();
 
             if (save)
-                matchDb.Write();
-
-            return matchDb;
+                Write();
         }
 
-        public static MatchDb FromWeb(bool save = true)
+        public static void InitializeFromWeb(bool save = true)
         {
-            var matchDb = new MatchDb();
-            matchDb.Download();
+            Download();
 
             if (save)
-                matchDb.Write();
-
-            return matchDb;
+                Write();
         }
 
-        public void Read()
+        public static void Read()
         {
             if (!File.Exists(FileName))
             {
@@ -56,12 +48,12 @@ namespace HonStatsManager
             Logger.Log($"Matches read from file: {matches.Count}");
             Logger.Log($"Last match id and date: {matches.Last().Id} - {matches.Last().Date}");
 
-            _matches.AddRange(matches);
+            MatchesStore.AddRange(matches);
         }
 
-        public void Download()
+        public static void Download()
         {
-            var lastKnownDate = _matches.LastOrDefault()?.Date;
+            var lastKnownDate = MatchesStore.LastOrDefault()?.Date;
 
             var matchHistory = Honzor.GetMatchHistory()
                 .SkipWhile(m => m.Date < lastKnownDate)
@@ -83,19 +75,19 @@ namespace HonStatsManager
             Logger.Log($"Matches downloaded: {matches.Count}");
             Logger.Log($"Last match id and date: {matches.Last().Id} - {matches.Last().Date}");
 
-            _matches.AddRange(matches);
+            MatchesStore.AddRange(matches);
         }
 
-        public void Write()
+        public static void Write()
         {
-            if (!_matches.Any())
+            if (!MatchesStore.Any())
             {
                 return;
             }
 
-            File.WriteAllText(FileName, JsonConvert.SerializeObject(_matches));
+            File.WriteAllText(FileName, JsonConvert.SerializeObject(MatchesStore));
             Logger.Log($"{FileName} saved.");
-            Logger.Log($"{_matches.Count} matches written to disk.");
+            Logger.Log($"{MatchesStore.Count} matches written to disk.");
         }
     }
 }

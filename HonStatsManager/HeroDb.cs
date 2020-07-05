@@ -7,46 +7,38 @@ using Newtonsoft.Json;
 
 namespace HonStatsManager
 {
-    internal class HeroDb
+    internal static class HeroDb
     {
         public const string Url = @"http://www.heroesofnewerth.com/heroes/";
         public const string FileName = @"heroes.db";
 
-        public IReadOnlyList<Hero> Heroes => _heroes.AsReadOnly();
+        public static IReadOnlyList<Hero> Heroes => HeroesStore.AsReadOnly();
 
-        private readonly List<Hero> _heroes = new List<Hero>();
+        private static readonly List<Hero> HeroesStore = new List<Hero>();
 
-        public static HeroDb FromDisk()
+        public static void InitializeFromDisk()
         {
-            var heroDb = new HeroDb();
-            heroDb.Read();
-            return heroDb;
+            Read();
         }
 
-        public static HeroDb FromDiskWithUpdate(bool save = true)
+        public static void InitializeFromDiskWithUpdate(bool save = true)
         {
-            var heroDb = new HeroDb();
-            heroDb.Read();
-            heroDb.Download();
+            Read();
+            Download();
 
             if (save)
-                heroDb.Write();
-
-            return heroDb;
+                Write();
         }
 
-        public static HeroDb FromWeb(bool save = true)
+        public static void InitializeFromWeb(bool save = true)
         {
-            var heroDb = new HeroDb();
-            heroDb.Download();
+            Download();
 
             if (save)
-                heroDb.Write();
-
-            return heroDb;
+                Write();
         }
 
-        public void Read()
+        public static void Read()
         {
             if (!File.Exists(FileName))
             {
@@ -58,10 +50,10 @@ namespace HonStatsManager
 
             Logger.Log($"Heroes read from file: {heroes.Count}");
 
-            _heroes.AddRange(heroes);
+            HeroesStore.AddRange(heroes);
         }
 
-        public void Download()
+        public static void Download()
         {
             using (var client = new WebClient())
             {
@@ -75,20 +67,20 @@ namespace HonStatsManager
 
                 Logger.Log($"Heroes downloaded: {heroes.Count}");
 
-                _heroes.AddRange(heroes); //todo unique
+                HeroesStore.AddRange(heroes); //todo unique
             }
         }
 
-        public void Write()
+        public static void Write()
         {
-            if (!_heroes.Any())
+            if (!HeroesStore.Any())
             {
                 return;
             }
 
-            File.WriteAllText(FileName, JsonConvert.SerializeObject(_heroes));
+            File.WriteAllText(FileName, JsonConvert.SerializeObject(HeroesStore));
             Logger.Log($"{FileName} saved.");
-            Logger.Log($"{_heroes.Count} heroes written to disk.");
+            Logger.Log($"{HeroesStore.Count} heroes written to disk.");
         }
     }
 }

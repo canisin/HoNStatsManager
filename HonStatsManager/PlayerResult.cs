@@ -6,6 +6,7 @@ namespace HonStatsManager
     {
         public Player Player { get; set; }
         public Team Team { get; set; }
+        public string Hero { get; set; }
         public bool Wins { get; set; }
         public bool Losses { get; set; }
         public bool Concedes { get; set; }
