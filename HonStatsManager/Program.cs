@@ -17,23 +17,34 @@ namespace HonStatsManager
         {
             HeroDb.InitializeFromDisk();
             MatchDb.InitializeFromDisk();
-            var matches = MatchDb.Matches;
 
+            PrintMatchTypeStats();
+            PrintPlayerStats();
+            MatchDb.FilterMatches(match => match.Type.In(MatchType.TwoVsTwo, MatchType.ThreeVsTwo));
+            PrintHeroStats();
+        }
+
+        private static void PrintMatchTypeStats()
+        {
             Console.WriteLine();
             Console.WriteLine();
+            PrintTitle("Match Counts");
             foreach (var matchType in Enum.GetValues(typeof(MatchType)).Cast<MatchType>())
             {
-                Console.WriteLine($"{matchType}: {matches.Count(m => m.Type == matchType)} matches");
+                Console.WriteLine($"{matchType}: {MatchDb.Matches.Count(m => m.Type == matchType)} matches");
             }
+        }
 
-            foreach (var matchGroupGroup in matches
+        private static void PrintPlayerStats()
+        {
+            foreach (var matchGroupGroup in MatchDb.Matches
                 .Where(m => m.Type != MatchType.Other)
                 .GroupBy(m => m.Type)
                 .OrderBy(mg => mg.Key))
             {
                 Console.WriteLine();
                 Console.WriteLine();
-                Console.WriteLine(matchGroupGroup.Key);
+                PrintTitle(matchGroupGroup.Key.ToString());
                 foreach (var matchGroup in matchGroupGroup
                     .Select(m => m.GetTeams())
                     .GroupBy(ts => ts.Select(t => t.Key).StringJoin(" vs "))
@@ -53,13 +64,16 @@ namespace HonStatsManager
                     Console.WriteLine($"{team2}: {team2Wins} wins ({team2Ratio:P})");
                 }
             }
+        }
 
+        private static void PrintHeroStats()
+        {
             Console.WriteLine();
             Console.WriteLine();
-            Console.WriteLine("Hero Stats:");
+            PrintTitle("Hero Stats (only 2v2 and 2v3 matches");
 
             var heroStats = HeroDb.Heroes.ToDictionary(hero => hero.Id, hero => (Hero: hero, Picks: 0, Wins: 0));
-            foreach (var match in matches)
+            foreach (var match in MatchDb.Matches)
             {
                 foreach (var playerResult in match.PlayerResults)
                 {
@@ -71,10 +85,20 @@ namespace HonStatsManager
                 }
             }
 
-            foreach (var (hero, picks, wins) in heroStats.Values.OrderByDescending(heroStat => (double) heroStat.Wins / heroStat.Picks))
+            foreach (var (hero, picks, wins) in heroStats.Values
+                .OrderByDescending(heroStat => (double) heroStat.Wins / heroStat.Picks))
             {
                 Console.WriteLine($"{hero.Name}: {wins}/{picks} ({(double) wins / picks * 100:#.}%)");
             }
+        }
+
+        private static void PrintTitle(string title)
+        {
+            title = $"=={title}==";
+            var underline = Enumerable.Repeat('=', title.Length).StringJoin();
+
+            Console.WriteLine(title);
+            Console.WriteLine(underline);
         }
     }
 }

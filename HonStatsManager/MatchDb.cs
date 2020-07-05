@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -9,9 +10,9 @@ namespace HonStatsManager
     {
         public const string FileName = @"matches.db";
 
-        public static IReadOnlyList<Match> Matches => MatchesStore.AsReadOnly();
+        public static IReadOnlyList<Match> Matches => _matches.AsReadOnly();
 
-        private static readonly List<Match> MatchesStore = new List<Match>();
+        private static List<Match> _matches = new List<Match>();
 
         public static void InitializeFromDisk()
         {
@@ -35,6 +36,11 @@ namespace HonStatsManager
                 Write();
         }
 
+        public static void FilterMatches(Func<Match, bool> predicate)
+        {
+            _matches = _matches.Where(predicate).ToList();
+        }
+
         private static void Read()
         {
             if (!File.Exists(FileName))
@@ -48,12 +54,12 @@ namespace HonStatsManager
             Logger.Log($"Matches read from file: {matches.Count}");
             Logger.Log($"Last match id and date: {matches.Last().Id} - {matches.Last().Date}");
 
-            MatchesStore.AddRange(matches);
+            _matches.AddRange(matches);
         }
 
         private static void Download()
         {
-            var lastKnownDate = MatchesStore.LastOrDefault()?.Date;
+            var lastKnownDate = _matches.LastOrDefault()?.Date;
 
             var matchHistory = Honzor.GetMatchHistory()
                 .SkipWhile(m => m.Date < lastKnownDate)
@@ -75,19 +81,19 @@ namespace HonStatsManager
             Logger.Log($"Matches downloaded: {matches.Count}");
             Logger.Log($"Last match id and date: {matches.Last().Id} - {matches.Last().Date}");
 
-            MatchesStore.AddRange(matches);
+            _matches.AddRange(matches);
         }
 
         private static void Write()
         {
-            if (!MatchesStore.Any())
+            if (!_matches.Any())
             {
                 return;
             }
 
-            File.WriteAllText(FileName, JsonConvert.SerializeObject(MatchesStore));
+            File.WriteAllText(FileName, JsonConvert.SerializeObject(_matches));
             Logger.Log($"{FileName} saved.");
-            Logger.Log($"{MatchesStore.Count} matches written to disk.");
+            Logger.Log($"{_matches.Count} matches written to disk.");
         }
     }
 }

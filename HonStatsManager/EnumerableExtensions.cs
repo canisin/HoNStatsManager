@@ -69,5 +69,10 @@ namespace HonStatsManager
                 dictionary.Add(keyValuePair.Key, keyValuePair.Value);
             }
         }
+
+        public static string StringJoin(this IEnumerable<char> chars)
+        {
+            return new string(chars.ToArray());
+        }
     }
 }
