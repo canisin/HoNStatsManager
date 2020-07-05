@@ -7,8 +7,14 @@ namespace HonStatsManager
 {
     internal struct MatchRecord
     {
-        public string Id;
-        public DateTime Date;
+        public readonly string Id;
+        public readonly DateTime Date;
+
+        public MatchRecord(string id, DateTime date)
+        {
+            Id = id;
+            Date = date;
+        }
     }
 
     internal static class MatchHistory
@@ -18,11 +24,7 @@ namespace HonStatsManager
             return ((string) token[0]["history"])
                 .Split(',')
                 .Select(item => item.Split('|'))
-                .Select(item => new MatchRecord
-                {
-                    Id = item.First(),
-                    Date = ParseDate(item.Last())
-                });
+                .Select(item => new MatchRecord(item.First(), ParseDate(item.Last())));
         }
 
         private static DateTime ParseDate(string value)
