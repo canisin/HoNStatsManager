@@ -26,7 +26,6 @@ namespace HonStatsManager
                 Console.WriteLine($"{matchType}: {matches.Count(m => m.Type == matchType)} matches");
             }
 
-            Console.WriteLine();
             foreach (var matchGroupGroup in matches
                 .Where(m => m.Type != MatchType.Other)
                 .GroupBy(m => m.Type)
@@ -53,6 +52,28 @@ namespace HonStatsManager
                     Console.WriteLine($"{team1}: {team1Wins} wins ({team1Ratio:P})");
                     Console.WriteLine($"{team2}: {team2Wins} wins ({team2Ratio:P})");
                 }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Hero Stats:");
+
+            var heroStats = HeroDb.Heroes.ToDictionary(hero => hero.Id, hero => (Hero: hero, Picks: 0, Wins: 0));
+            foreach (var match in matches)
+            {
+                foreach (var playerResult in match.PlayerResults)
+                {
+                    var heroStat = heroStats[playerResult.Hero.Id];
+                    ++heroStat.Picks;
+                    if (playerResult.Wins)
+                        ++heroStat.Wins;
+                    heroStats[playerResult.Hero.Id] = heroStat;
+                }
+            }
+
+            foreach (var (hero, picks, wins) in heroStats.Values.OrderByDescending(heroStat => (double) heroStat.Wins / heroStat.Picks))
+            {
+                Console.WriteLine($"{hero.Name}: {wins}/{picks} ({(double) wins / picks * 100:#.}%)");
             }
         }
     }
