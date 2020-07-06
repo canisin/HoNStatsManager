@@ -21,6 +21,9 @@ namespace HonStatsManager
             Console.WriteLine($"First Match: {MatchDb.Matches.First().Date}");
             Console.WriteLine($"Last Match: {MatchDb.Matches.Last().Date}");
 
+            Logger.Log("Filtering matches with win/loss inconsistencies..");
+            MatchDb.FilterMatches(match => match.CheckWinLossConsistency());
+
             PrintMapStats();
 
             Logger.Log("Filtering matches other than Midwars matches..");

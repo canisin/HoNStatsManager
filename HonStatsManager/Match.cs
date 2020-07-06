@@ -34,6 +34,19 @@ namespace HonStatsManager
             Type = this.GetMatchType();
         }
 
+        public bool CheckWinLossConsistency()
+        {
+            var first = PlayerResults.First();
+            var isConsistent = PlayerResults.Skip(1)
+                .All(r => (r.Team == first.Team && r.Wins == first.Wins && r.Losses == first.Losses)
+                          || (r.Team != first.Team && r.Wins != first.Wins && r.Losses != first.Losses));
+
+            if ( !isConsistent)
+                Logger.Log($"Inconsistent wins and losses detected in match {Id}.");
+
+            return isConsistent;
+        }
+
         public List<(string Key, int Size, bool IsWinner)> GetTeams()
         {
             return Enum.GetValues(typeof(Team)).Cast<Team>()
