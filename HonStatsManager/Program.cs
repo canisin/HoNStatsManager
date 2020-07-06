@@ -18,12 +18,33 @@ namespace HonStatsManager
             HeroDb.InitializeFromDisk();
             MatchDb.InitializeFromDisk();
 
+            Console.WriteLine($"First Match: {MatchDb.Matches.First().Date}");
+            Console.WriteLine($"Last Match: {MatchDb.Matches.Last().Date}");
+
+            PrintMapStats();
+
+            Logger.Log("Filtering matches other than Midwars matches..");
+            MatchDb.FilterMatches(match => match.Map == "midwars");
+
+            PrintMatchTypeStats();
+
             Logger.Log("Filtering matches other than 2v2 and 3v2's..");
             MatchDb.FilterMatches(match => match.Type.In(MatchType.TwoVsTwo, MatchType.ThreeVsTwo));
 
-            PrintMatchTypeStats();
             PrintPlayerStats();
             PrintHeroStats();
+        }
+
+        private static void PrintMapStats()
+        {
+            Console.WriteLine();
+            Console.WriteLine();
+            PrintTitle("Map Stats");
+            foreach (var mapGroup in MatchDb.Matches
+                .GroupBy(m => m.Map))
+            {
+                Console.WriteLine($"{mapGroup.First().Map}: {mapGroup.Count()} matches");
+            }
         }
 
         private static void PrintMatchTypeStats()
@@ -31,9 +52,6 @@ namespace HonStatsManager
             Console.WriteLine();
             Console.WriteLine();
             PrintTitle("Match Stats");
-            Console.WriteLine($"First Match: {MatchDb.Matches.First().Date}");
-            Console.WriteLine($"Last Match: {MatchDb.Matches.Last().Date}");
-            Console.WriteLine();
             foreach (var matchType in Enum.GetValues(typeof(MatchType)).Cast<MatchType>())
             {
                 Console.WriteLine($"{matchType}: {MatchDb.Matches.Count(m => m.Type == matchType)} matches");
@@ -43,7 +61,6 @@ namespace HonStatsManager
         private static void PrintPlayerStats()
         {
             foreach (var matchGroupGroup in MatchDb.Matches
-                .Where(m => m.Type != MatchType.Other)
                 .GroupBy(m => m.Type)
                 .OrderBy(mg => mg.Key))
             {

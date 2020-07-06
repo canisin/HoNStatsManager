@@ -11,6 +11,7 @@ namespace HonStatsManager
         public DateTime Date { get; set; }
         public TimeSpan Duration { get; set; }
         public List<PlayerResult> PlayerResults { get; set; }
+        public string Map { get; set; }
         public MatchType Type { get; set; }
 
         public Match()
@@ -28,6 +29,7 @@ namespace HonStatsManager
             Date = TimeZoneInfo.ConvertTimeToUtc((DateTime) summary["mdt"], HonApi.TimeZone);
             Duration = TimeSpan.FromSeconds((int) summary["time_played"]);
             PlayerResults = statistics.Select(t => new PlayerResult(t)).ToList();
+            Map = (string) summary["map"];
 
             Type = this.GetMatchType();
         }

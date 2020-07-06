@@ -40,7 +40,7 @@ namespace HonStatsManager
         {
             var initialCount = _matches.Count;
             _matches = _matches.Where(predicate).ToList();
-            Logger.Log($"{initialCount - _matches.Count} matches filtered.");
+            Logger.Log($"{_matches.Count} matches in db. {initialCount - _matches.Count} matches filtered.");
         }
 
         private static void Read()
