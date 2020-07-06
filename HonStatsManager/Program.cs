@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace HonStatsManager
@@ -96,25 +97,36 @@ namespace HonStatsManager
             Console.WriteLine();
             Console.WriteLine();
             PrintTitle("Hero Stats");
+            PrintHeroStatsImpl(MatchDb.Matches.SelectMany(m => m.PlayerResults), 1);
 
-            var heroStats = HeroDb.Heroes.ToDictionary(hero => hero.Id, hero => (Hero: hero, Picks: 0, Wins: 0));
-            foreach (var match in MatchDb.Matches)
+            foreach (var player in Honzor.Players)
             {
-                foreach (var playerResult in match.PlayerResults)
-                {
-                    var heroStat = heroStats[playerResult.Hero.Id];
-                    ++heroStat.Picks;
-                    if (playerResult.Wins)
-                        ++heroStat.Wins;
-                    heroStats[playerResult.Hero.Id] = heroStat;
-                }
+                Console.WriteLine();
+                Console.WriteLine();
+                PrintTitle($"{player.Nickname}'s Hero Stats");
+                PrintHeroStatsImpl(MatchDb.Matches.SelectMany(m => m.PlayerResults)
+                    .Where(r => r.Player.Nickname == player.Nickname), 5);
+            }
+        }
+
+        private static void PrintHeroStatsImpl(IEnumerable<PlayerResult> results, int minPicks)
+        {
+            var heroStats = HeroDb.Heroes.ToDictionary(hero => hero.Id, hero => (Hero: hero, Picks: 0, Wins: 0));
+            foreach (var result in results)
+            {
+                var heroStat = heroStats[result.Hero.Id];
+                ++heroStat.Picks;
+                if (result.Wins)
+                    ++heroStat.Wins;
+                heroStats[result.Hero.Id] = heroStat;
             }
 
             Console.WriteLine($"Total Hero Picks = {heroStats.Values.Sum(hero => hero.Picks)}");
 
             foreach (var (hero, picks, wins) in heroStats.Values
                 //.OrderByDescending(heroStat => (double) heroStat.Wins / heroStat.Picks))
-                .OrderByDescending(heroStat => heroStat.Picks))
+                .OrderByDescending(heroStat => heroStat.Picks)
+                .Where(heroStat => heroStat.Picks >= minPicks))
             {
                 Console.WriteLine($"{hero.Name}: {wins}/{picks} ({(double) wins / picks * 100:#.}%)");
             }
