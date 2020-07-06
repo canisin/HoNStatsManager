@@ -38,7 +38,9 @@ namespace HonStatsManager
 
         public static void FilterMatches(Func<Match, bool> predicate)
         {
+            var initialCount = _matches.Count;
             _matches = _matches.Where(predicate).ToList();
+            Logger.Log($"{initialCount - _matches.Count} matches filtered.");
         }
 
         private static void Read()

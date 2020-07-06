@@ -18,9 +18,11 @@ namespace HonStatsManager
             HeroDb.InitializeFromDisk();
             MatchDb.InitializeFromDisk();
 
+            Logger.Log("Filtering matches other than 2v2 and 3v2's..");
+            MatchDb.FilterMatches(match => match.Type.In(MatchType.TwoVsTwo, MatchType.ThreeVsTwo));
+
             PrintMatchTypeStats();
             PrintPlayerStats();
-            MatchDb.FilterMatches(match => match.Type.In(MatchType.TwoVsTwo, MatchType.ThreeVsTwo));
             PrintHeroStats();
         }
 
@@ -73,7 +75,7 @@ namespace HonStatsManager
         {
             Console.WriteLine();
             Console.WriteLine();
-            PrintTitle("Hero Stats (only 2v2 and 2v3 matches");
+            PrintTitle("Hero Stats");
 
             var heroStats = HeroDb.Heroes.ToDictionary(hero => hero.Id, hero => (Hero: hero, Picks: 0, Wins: 0));
             foreach (var match in MatchDb.Matches)
@@ -88,8 +90,11 @@ namespace HonStatsManager
                 }
             }
 
+            Console.WriteLine($"Total Hero Picks = {heroStats.Values.Sum(hero => hero.Picks)}");
+
             foreach (var (hero, picks, wins) in heroStats.Values
-                .OrderByDescending(heroStat => (double) heroStat.Wins / heroStat.Picks))
+                //.OrderByDescending(heroStat => (double) heroStat.Wins / heroStat.Picks))
+                .OrderByDescending(heroStat => heroStat.Picks))
             {
                 Console.WriteLine($"{hero.Name}: {wins}/{picks} ({(double) wins / picks * 100:#.}%)");
             }
