@@ -4,18 +4,14 @@ namespace HonStatsManager
 {
     internal class PlayerResult
     {
-        public Player Player { get; set; }
-        public Team Team { get; set; }
-        public Hero Hero { get; set; }
-        public bool Wins { get; set; }
-        public bool Losses { get; set; }
-        public bool Concedes { get; set; }
-        public bool Discos { get; set; }
-        public bool Kicked { get; set; }
-
-        public PlayerResult()
-        {
-        }
+        public Player Player { get; }
+        public Team Team { get; }
+        public Hero Hero { get; }
+        public bool Wins { get; }
+        public bool Losses { get; }
+        public bool Concedes { get; }
+        public bool Discos { get; }
+        public bool Kicked { get; }
 
         public PlayerResult(JToken token)
         {

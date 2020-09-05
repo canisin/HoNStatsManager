@@ -7,16 +7,12 @@ namespace HonStatsManager
 {
     internal class Match
     {
-        public string Id { get; set; }
-        public DateTime Date { get; set; }
-        public TimeSpan Duration { get; set; }
-        public List<PlayerResult> PlayerResults { get; set; }
-        public string Map { get; set; }
-        public MatchType Type { get; set; }
-
-        public Match()
-        {
-        }
+        public string Id { get;  }
+        public DateTime Date { get;  }
+        public TimeSpan Duration { get;  }
+        public List<PlayerResult> PlayerResults { get;  }
+        public string Map { get;  }
+        public MatchType Type { get;  }
 
         public Match(JToken token, MatchRecord matchRecord)
         {
