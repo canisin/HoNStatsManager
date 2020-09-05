@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace HonStatsManager
@@ -73,6 +74,12 @@ namespace HonStatsManager
         public static string StringJoin(this IEnumerable<char> chars)
         {
             return new string(chars.ToArray());
+        }
+
+        public static IReadOnlyDictionary<TKey, TValue> AsReadOnly<TKey, TValue>(
+            this Dictionary<TKey, TValue> dictionary)
+        {
+            return new ReadOnlyDictionary<TKey, TValue>(dictionary);
         }
     }
 }

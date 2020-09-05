@@ -12,9 +12,10 @@ namespace HonStatsManager
         public const string Url = @"http://www.heroesofnewerth.com/heroes/";
         public const string FileName = @"heroes.db";
 
-        public static IReadOnlyCollection<Hero> Heroes => HeroDict.Values;
+        public static IReadOnlyCollection<Hero> Heroes => _heroDict.Values;
+        public static IReadOnlyDictionary<string, Hero> HeroDict => _heroDict.AsReadOnly();
 
-        public static Dictionary<string, Hero> HeroDict { get; private set; } = new Dictionary<string, Hero>();
+        private static Dictionary<string, Hero> _heroDict = new Dictionary<string, Hero>();
 
         public static void InitializeFromDisk()
         {
@@ -41,7 +42,7 @@ namespace HonStatsManager
 
             Logger.Log($"Heroes read from file: {heroes.Count}");
 
-            HeroDict = heroes.ToDictionary(hero => hero.Id);
+            _heroDict = heroes.ToDictionary(hero => hero.Id);
         }
 
         private static void Download()
@@ -58,20 +59,20 @@ namespace HonStatsManager
 
                 Logger.Log($"Heroes downloaded: {heroes.Count}");
 
-                HeroDict = heroes.ToDictionary(hero => hero.Id);
+                _heroDict = heroes.ToDictionary(hero => hero.Id);
             }
         }
 
         private static void Write()
         {
-            if (!HeroDict.Any())
+            if (!_heroDict.Any())
             {
                 return;
             }
 
-            File.WriteAllText(FileName, JsonConvert.SerializeObject(HeroDict.Values));
+            File.WriteAllText(FileName, JsonConvert.SerializeObject(_heroDict.Values));
             Logger.Log($"{FileName} saved.");
-            Logger.Log($"{HeroDict.Count} heroes written to disk.");
+            Logger.Log($"{_heroDict.Count} heroes written to disk.");
         }
     }
 }
