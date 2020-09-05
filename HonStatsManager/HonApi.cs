@@ -27,7 +27,7 @@ namespace HonStatsManager
         {
             Logger.Log($"Getting match history for {player.Nickname}");
 
-            var response = (JArray) Get($"match_history/public/accountid/{player.AccountId}");
+            var response = (JToken) Get($"match_history/public/accountid/{player.AccountId}");
             return MatchHistory.Parse(response)
                 .Where(m => m.Date >= StatsEpoch);
         }
@@ -41,7 +41,7 @@ namespace HonStatsManager
 
             foreach (var bucket in matchHistory.SplitBy(MultiMatchBucketCount))
             {
-                var response = (JArray) Get($"multi_match/all/matchids/{string.Join("+", bucket.Select(m => m.Id))}");
+                var response = (JToken) Get($"multi_match/all/matchids/{string.Join("+", bucket.Select(m => m.Id))}");
 
                 timer.Update(bucket.Count);
 
@@ -94,7 +94,7 @@ namespace HonStatsManager
 
         public static Match GetMatch(MatchRecord matchRecord)
         {
-            var response = (JArray) Get($"match/all/matchid/{matchRecord.Id}");
+            var response = (JToken) Get($"match/all/matchid/{matchRecord.Id}");
 
             if (response == null)
                 return null;
