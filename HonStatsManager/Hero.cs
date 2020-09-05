@@ -2,8 +2,8 @@
 {
     internal class Hero
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
+        public string Id { get; }
+        public string Name { get; }
 
         public Hero(string id, string name)
         {

@@ -14,7 +14,7 @@ namespace HonStatsManager
 
         public static IReadOnlyCollection<Hero> Heroes => HeroDict.Values;
 
-        public static Dictionary<string, Hero> HeroDict { get; } = new Dictionary<string, Hero>();
+        public static Dictionary<string, Hero> HeroDict { get; private set; } = new Dictionary<string, Hero>();
 
         public static void InitializeFromDisk()
         {
@@ -41,7 +41,7 @@ namespace HonStatsManager
 
             Logger.Log($"Heroes read from file: {heroes.Count}");
 
-            HeroDict.AddRange(heroes.ToKeyValuePairs(hero => hero.Id));
+            HeroDict = heroes.ToDictionary(hero => hero.Id);
         }
 
         private static void Download()
@@ -58,7 +58,7 @@ namespace HonStatsManager
 
                 Logger.Log($"Heroes downloaded: {heroes.Count}");
 
-                HeroDict.AddRange(heroes.ToKeyValuePairs(hero => hero.Id));
+                HeroDict = heroes.ToDictionary(hero => hero.Id);
             }
         }
 
