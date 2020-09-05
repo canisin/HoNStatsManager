@@ -18,14 +18,14 @@ namespace HonStatsManager
         {
         }
 
-        public Match(string id, JToken token)
+        public Match(JToken token, MatchRecord matchRecord)
         {
-            var settings = token[0].Single(id.CheckMatchId);
-            var inventories = token[1].Where(id.CheckMatchId);
-            var statistics = token[2].Where(id.CheckMatchId);
-            var summary = token[3].Single(id.CheckMatchId);
+            var settings = token[0].Single(t => CheckMatchId(t, matchRecord.Id));
+            var inventories = token[1].Where(t => CheckMatchId(t, matchRecord.Id));
+            var statistics = token[2].Where(t => CheckMatchId(t, matchRecord.Id));
+            var summary = token[3].Single(t => CheckMatchId(t, matchRecord.Id));
 
-            Id = id;
+            Id = matchRecord.Id;
             Date = TimeZoneInfo.ConvertTimeToUtc((DateTime) summary["mdt"], HonApi.TimeZone);
             Duration = TimeSpan.FromSeconds((int) summary["time_played"]);
             PlayerResults = statistics.Select(t => new PlayerResult(t)).ToList();
@@ -41,7 +41,7 @@ namespace HonStatsManager
                 .All(r => (r.Team == first.Team && r.Wins == first.Wins && r.Losses == first.Losses)
                           || (r.Team != first.Team && r.Wins != first.Wins && r.Losses != first.Losses));
 
-            if ( !isConsistent)
+            if (!isConsistent)
                 Logger.Log($"Inconsistent wins and losses detected in match {Id}.");
 
             return isConsistent;
@@ -61,11 +61,13 @@ namespace HonStatsManager
                 .ThenBy(t => t.Key)
                 .ToList();
         }
-    }
 
-    internal static class MatchExtensions
-    {
-        public static bool CheckMatchId(this string matchId, JToken token)
+        public static bool CheckMatchId(JToken token, MatchRecord matchRecord)
+        {
+            return token[0].Any(t => CheckMatchId(t, matchRecord.Id));
+        }
+
+        private static bool CheckMatchId(JToken token, string matchId)
         {
             return (string) token["match_id"] == matchId;
         }

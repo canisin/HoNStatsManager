@@ -7,8 +7,8 @@ namespace HonStatsManager
 {
     internal struct MatchRecord
     {
-        public readonly string Id;
-        public readonly DateTime Date;
+        public string Id { get; }
+        public DateTime Date { get; }
 
         public MatchRecord(string id, DateTime date)
         {

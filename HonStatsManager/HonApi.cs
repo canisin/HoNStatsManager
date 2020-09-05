@@ -52,12 +52,12 @@ namespace HonStatsManager
 
                 foreach (var matchRecord in bucket)
                 {
-                    if (!response.First().Any(matchRecord.Id.CheckMatchId))
+                    if (!Match.CheckMatchId(response, matchRecord))
                     {
                         continue;
                     }
 
-                    yield return new Match(matchRecord.Id, response);
+                    yield return new Match(response, matchRecord);
                 }
             }
 
@@ -94,12 +94,12 @@ namespace HonStatsManager
 
         public static Match GetMatch(MatchRecord matchRecord)
         {
-            var response = (JArray)Get($"match/all/matchid/{matchRecord.Id}");
+            var response = (JArray) Get($"match/all/matchid/{matchRecord.Id}");
 
             if (response == null)
                 return null;
 
-            return new Match(matchRecord.Id, response);
+            return new Match(response, matchRecord);
         }
 
         public static string GetMatchRaw(string matchId)
