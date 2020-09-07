@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace HonStatsManager
 {
@@ -12,6 +13,20 @@ namespace HonStatsManager
         public bool Concedes { get; }
         public bool Discos { get; }
         public bool Kicked { get; }
+
+        [JsonConstructor]
+        public PlayerResult(Player player, Team team, Hero hero,
+            bool wins, bool losses, bool concedes, bool discos, bool kicked)
+        {
+            Player = player;
+            Team = team;
+            Hero = hero;
+            Wins = wins;
+            Losses = losses;
+            Concedes = concedes;
+            Discos = discos;
+            Kicked = kicked;
+        }
 
         public PlayerResult(JToken token)
         {

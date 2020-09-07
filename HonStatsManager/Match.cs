@@ -1,18 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace HonStatsManager
 {
     internal class Match
     {
-        public string Id { get;  }
-        public DateTime Date { get;  }
-        public TimeSpan Duration { get;  }
-        public List<PlayerResult> PlayerResults { get;  }
-        public string Map { get;  }
-        public MatchType Type { get;  }
+        public string Id { get; }
+        public DateTime Date { get; }
+        public TimeSpan Duration { get; }
+        public List<PlayerResult> PlayerResults { get; }
+        public string Map { get; }
+        public MatchType Type { get; }
+
+        [JsonConstructor]
+        public Match(string id, DateTime date, TimeSpan duration,
+            List<PlayerResult> playerResults,
+            string map, MatchType type)
+        {
+            Id = id;
+            Date = date;
+            Duration = duration;
+            PlayerResults = playerResults;
+            Map = map;
+            Type = type;
+        }
 
         public Match(JToken token, MatchRecord matchRecord)
         {

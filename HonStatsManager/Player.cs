@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace HonStatsManager
 {
@@ -7,6 +8,7 @@ namespace HonStatsManager
         public string AccountId { get; }
         public string Nickname { get; }
 
+        [JsonConstructor]
         public Player(string accountId, string nickname)
         {
             AccountId = accountId;
