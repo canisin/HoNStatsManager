@@ -19,8 +19,8 @@ namespace HonStatsManager
             HeroDb.InitializeFromDisk();
             MatchDb.InitializeFromDisk();
 
-            Console.WriteLine($"First Match: {MatchDb.Matches.First().Date}");
-            Console.WriteLine($"Last Match: {MatchDb.Matches.Last().Date}");
+            Console.WriteLine($"First Match: {MatchDb.Matches.First().Time}");
+            Console.WriteLine($"Last Match: {MatchDb.Matches.Last().Time}");
 
             Logger.Log("Filtering matches with win/loss inconsistencies..");
             MatchDb.FilterMatches(match => match.CheckWinLossConsistency());

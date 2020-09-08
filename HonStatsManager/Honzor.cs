@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -6,6 +7,19 @@ namespace HonStatsManager
 {
     internal static class Honzor
     {
+        public static readonly TimeZoneInfo TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
+
+        public static DateTime CalcGameNight(this Match match)
+        {
+            var honzorTime = TimeZoneInfo.ConvertTimeFromUtc(match.Time, TimeZone);
+            var gameNight = honzorTime.Date;
+
+            if (honzorTime.TimeOfDay <= TimeSpan.Parse("06:00"))
+                gameNight = gameNight.AddDays(-1);
+
+            return gameNight;
+        }
+
         [SuppressMessage("ReSharper", "StringLiteralTypo")]
         public static List<Player> Players
             = new List<Player>

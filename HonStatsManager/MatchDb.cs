@@ -54,14 +54,14 @@ namespace HonStatsManager
             var matches = JsonConvert.DeserializeObject<List<Match>>(File.ReadAllText(FileName));
 
             Logger.Log($"Matches read from file: {matches.Count}");
-            Logger.Log($"Last match id and date: {matches.Last().Id} - {matches.Last().Date}");
+            Logger.Log($"Last match id and date: {matches.Last().Id} - {matches.Last().Time}");
 
             _matches.AddRange(matches);
         }
 
         private static void Download()
         {
-            var lastKnownDate = _matches.LastOrDefault()?.Date;
+            var lastKnownDate = _matches.LastOrDefault()?.Time;
 
             var matchHistory = Honzor.GetMatchHistory()
                 .SkipWhile(m => m.Date < lastKnownDate)
@@ -81,7 +81,7 @@ namespace HonStatsManager
             var matches = HonApi.GetMultiMatch(matchHistory).ToList();
 
             Logger.Log($"Matches downloaded: {matches.Count}");
-            Logger.Log($"Last match id and date: {matches.Last().Id} - {matches.Last().Date}");
+            Logger.Log($"Last match id and date: {matches.Last().Id} - {matches.Last().Time}");
 
             _matches.AddRange(matches);
         }

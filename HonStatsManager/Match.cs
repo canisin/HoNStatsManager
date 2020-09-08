@@ -9,19 +9,20 @@ namespace HonStatsManager
     internal class Match
     {
         public string Id { get; }
-        public DateTime Date { get; }
+        public DateTime Time { get; }
+        public DateTime LocalTime => Time.ToLocalTime();
         public TimeSpan Duration { get; }
         public List<PlayerResult> PlayerResults { get; }
         public string Map { get; }
         public MatchType Type { get; }
 
         [JsonConstructor]
-        public Match(string id, DateTime date, TimeSpan duration,
+        public Match(string id, DateTime time, TimeSpan duration,
             List<PlayerResult> playerResults,
             string map, MatchType type)
         {
             Id = id;
-            Date = date;
+            Time = time;
             Duration = duration;
             PlayerResults = playerResults;
             Map = map;
@@ -36,7 +37,7 @@ namespace HonStatsManager
             var summary = token[3].Single(t => CheckMatchId(t, matchRecord.Id));
 
             Id = matchRecord.Id;
-            Date = TimeZoneInfo.ConvertTimeToUtc((DateTime) summary["mdt"], HonApi.TimeZone);
+            Time = TimeZoneInfo.ConvertTimeToUtc((DateTime) summary["mdt"], HonApi.TimeZone);
             Duration = TimeSpan.FromSeconds((int) summary["time_played"]);
             PlayerResults = statistics.Select(t => new PlayerResult(t)).ToList();
             Map = (string) summary["map"];
