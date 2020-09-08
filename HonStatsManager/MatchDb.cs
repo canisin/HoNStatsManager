@@ -61,29 +61,28 @@ namespace HonStatsManager
 
         private static void Download()
         {
-            var lastKnownDate = _matches.LastOrDefault()?.Time;
-
-            var matchHistory = Honzor.GetMatchHistory()
-                .SkipWhile(m => m.Date < lastKnownDate)
+            var newMatchRecords = Honzor.GetMatchHistory()
+                .Where(mr => !mr.Id.In(_matches.Select(m => m.Id)))
                 .ToList();
 
-            if (!matchHistory.Any())
+            if (!newMatchRecords.Any())
             {
-                Logger.Log(lastKnownDate.HasValue
-                    ? $"No new matches since {lastKnownDate}."
+                Logger.Log(_matches.Any()
+                    ? "No new matches."
                     : "No matches found.");
 
                 return;
             }
 
-            Logger.Log($"Found {matchHistory.Count} {(lastKnownDate.HasValue ? "new" : "")} matches.");
+            Logger.Log($"Found {newMatchRecords.Count} {(_matches.Any() ? "new" : "")} matches.");
 
-            var matches = HonApi.GetMultiMatch(matchHistory).ToList();
+            var matches = HonApi.GetMultiMatch(newMatchRecords).ToList();
 
             Logger.Log($"Matches downloaded: {matches.Count}");
             Logger.Log($"Last match id and date: {matches.Last().Id} - {matches.Last().Time}");
 
             _matches.AddRange(matches);
+            _matches = _matches.OrderBy(m => m.Time).ToList();
         }
 
         private static void Write()
