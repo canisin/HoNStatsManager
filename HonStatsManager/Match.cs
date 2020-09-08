@@ -10,7 +10,6 @@ namespace HonStatsManager
     {
         public string Id { get; }
         public DateTime Time { get; }
-        public DateTime LocalTime => Time.ToLocalTime();
         public TimeSpan Duration { get; }
         public List<PlayerResult> PlayerResults { get; }
         public string Map { get; }

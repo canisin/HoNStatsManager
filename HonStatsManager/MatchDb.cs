@@ -54,7 +54,7 @@ namespace HonStatsManager
             var matches = JsonConvert.DeserializeObject<List<Match>>(File.ReadAllText(FileName));
 
             Logger.Log($"Matches read from file: {matches.Count}");
-            Logger.Log($"Last match id and date: {matches.Last().Id} - {matches.Last().Time}");
+            Logger.Log($"Last match: {matches.Last().Id} - {matches.Last().Time.ToLocalTime()}");
 
             _matches.AddRange(matches);
         }
@@ -79,7 +79,7 @@ namespace HonStatsManager
             var matches = HonApi.GetMultiMatch(newMatchRecords).ToList();
 
             Logger.Log($"Matches downloaded: {matches.Count}");
-            Logger.Log($"Last match id and date: {matches.Last().Id} - {matches.Last().Time}");
+            Logger.Log($"Last match: {matches.Last().Id} - {matches.Last().Time.ToLocalTime()}");
 
             _matches.AddRange(matches);
             _matches = _matches.OrderBy(m => m.Time).ToList();
