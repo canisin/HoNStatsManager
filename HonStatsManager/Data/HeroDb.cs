@@ -16,19 +16,17 @@ namespace HonStatsManager.Data
         public static IReadOnlyCollection<Hero> Heroes => _heroDict.Values;
         public static IReadOnlyDictionary<string, Hero> HeroDict => _heroDict.AsReadOnly();
 
-        private static Dictionary<string, Hero> _heroDict = new Dictionary<string, Hero>();
+        private static Dictionary<string, Hero> _heroDict;
 
-        public static void InitializeFromDisk()
+        public static void Initialize()
         {
             Read();
         }
 
-        public static void InitializeFromWeb(bool save = true)
+        public static void Update()
         {
             Download();
-
-            if (save)
-                Write();
+            Write();
         }
 
         private static void Read()

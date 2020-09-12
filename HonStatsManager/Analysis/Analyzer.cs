@@ -10,9 +10,6 @@ namespace HonStatsManager.Analysis
     {
         public static void Run()
         {
-            HeroDb.InitializeFromDisk();
-            MatchDb.InitializeFromDisk();
-
             Logger.Log($"First Match: {MatchDb.Matches.First().Time.ToLocalTime()}");
             Logger.Log($"Last Match: {MatchDb.Matches.Last().Time.ToLocalTime()}");
 

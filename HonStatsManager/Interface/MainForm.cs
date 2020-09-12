@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HonStatsManager.Analysis;
+using HonStatsManager.Data;
 using HonStatsManager.Utility;
 
 namespace HonStatsManager.Interface
@@ -20,6 +21,8 @@ namespace HonStatsManager.Interface
             base.OnLoad(e);
 
             Logger.Initialize();
+            HeroDb.Initialize();
+            MatchDb.Initialize();
         }
 
         private void OnRunButtonClick(object sender, EventArgs e)
@@ -93,7 +96,27 @@ namespace HonStatsManager.Interface
                 return;
             }
 
-            _Console.AppendText(line + Environment.NewLine);
+            _console.AppendText(line + Environment.NewLine);
+        }
+
+        private void OnMatchesReloadMenuClick(object sender, EventArgs e)
+        {
+            MatchDb.Reload();
+        }
+
+        private void OnMatchesUpdateMenuClick(object sender, EventArgs e)
+        {
+            MatchDb.Update();
+        }
+
+        private void OnMatchesResetMenuClick(object sender, EventArgs e)
+        {
+            MatchDb.Reset();
+        }
+
+        private void OnHeroesUpdateMenuClick(object sender, EventArgs e)
+        {
+            MatchDb.Update();
         }
     }
 }

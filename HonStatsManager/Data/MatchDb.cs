@@ -13,28 +13,30 @@ namespace HonStatsManager.Data
 
         public static IReadOnlyList<Match> Matches => _matches.AsReadOnly();
 
-        private static List<Match> _matches = new List<Match>();
+        private static List<Match> _matches;
 
-        public static void InitializeFromDisk()
+        public static void Initialize()
         {
             Read();
         }
 
-        public static void InitializeFromDiskWithUpdate(bool save = true)
+        public static void Reload()
+        {
+            Read();
+        }
+
+        public static void Update()
         {
             Read();
             Download();
-
-            if (save)
-                Write();
+            Write();
         }
 
-        public static void InitializeFromWeb(bool save = true)
+        public static void Reset()
         {
+            Clear();
             Download();
-
-            if (save)
-                Write();
+            Write();
         }
 
         public static void FilterMatches(Func<Match, bool> predicate)
@@ -42,6 +44,11 @@ namespace HonStatsManager.Data
             var initialCount = _matches.Count;
             _matches = _matches.Where(predicate).ToList();
             Logger.Log($"{_matches.Count} matches in db. {initialCount - _matches.Count} matches filtered.");
+        }
+
+        private static void Clear()
+        {
+            _matches.Clear();
         }
 
         private static void Read()
@@ -52,12 +59,10 @@ namespace HonStatsManager.Data
                 return;
             }
 
-            var matches = JsonConvert.DeserializeObject<List<Match>>(File.ReadAllText(FileName));
+            _matches = JsonConvert.DeserializeObject<List<Match>>(File.ReadAllText(FileName));
 
-            Logger.Log($"Matches read from file: {matches.Count}");
-            Logger.Log($"Last match: {matches.Last().Id} - {matches.Last().Time.ToLocalTime()}");
-
-            _matches.AddRange(matches);
+            Logger.Log($"Matches read from file: {_matches.Count}");
+            Logger.Log($"Last match: {_matches.Last().Id} - {_matches.Last().Time.ToLocalTime()}");
         }
 
         private static void Download()
