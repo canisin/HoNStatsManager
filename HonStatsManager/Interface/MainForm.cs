@@ -93,10 +93,7 @@ namespace HonStatsManager.Interface
                 return;
             }
 
-            _Console.Text += line + Environment.NewLine;
-            _Console.SelectionStart = _Console.Text.Length;
-            _Console.ScrollToCaret();
-            _Console.Refresh();
+            _Console.AppendText(line + Environment.NewLine);
         }
     }
 }
