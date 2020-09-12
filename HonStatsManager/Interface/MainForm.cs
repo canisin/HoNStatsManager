@@ -15,6 +15,13 @@ namespace HonStatsManager.Interface
             InitializeComponent();
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            Logger.Initialize();
+        }
+
         private void OnRunButtonClick(object sender, EventArgs e)
         {
             if (_isBusy)

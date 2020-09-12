@@ -18,7 +18,7 @@ namespace HonStatsManager.Utility
     {
         public const string FileName = @"log.txt";
 
-        static Logger()
+        public static void Initialize()
         {
             File.Delete(FileName);
 
