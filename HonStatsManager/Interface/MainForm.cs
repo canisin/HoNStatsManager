@@ -16,9 +16,9 @@ namespace HonStatsManager.Interface
             InitializeComponent();
         }
 
-        protected override void OnLoad(EventArgs e)
+        protected override void OnShown(EventArgs e)
         {
-            base.OnLoad(e);
+            base.OnShown(e);
 
             Logger.Initialize();
             HeroDb.Initialize();
@@ -86,6 +86,10 @@ namespace HonStatsManager.Interface
 
             _isBusy = isBusy;
             _runButton.Enabled = !_isBusy;
+            _matchesReloadMenu.Enabled = !_isBusy;
+            _matchesUpdateMenu.Enabled = !_isBusy;
+            _matchesResetMenu.Enabled = !_isBusy;
+            _heroesUpdateMenu.Enabled = !_isBusy;
         }
 
         public void WriteLine(string line)
@@ -101,22 +105,34 @@ namespace HonStatsManager.Interface
 
         private void OnMatchesReloadMenuClick(object sender, EventArgs e)
         {
-            MatchDb.Reload();
+            if (_isBusy)
+                throw new InvalidOperationException();
+
+            Run(MatchDb.Reload);
         }
 
         private void OnMatchesUpdateMenuClick(object sender, EventArgs e)
         {
-            MatchDb.Update();
+            if (_isBusy)
+                throw new InvalidOperationException();
+
+            Run(MatchDb.Update);
         }
 
         private void OnMatchesResetMenuClick(object sender, EventArgs e)
         {
-            MatchDb.Reset();
+            if (_isBusy)
+                throw new InvalidOperationException();
+
+            Run(MatchDb.Reset);
         }
 
         private void OnHeroesUpdateMenuClick(object sender, EventArgs e)
         {
-            MatchDb.Update();
+            if (_isBusy)
+                throw new InvalidOperationException();
+
+            Run(HeroDb.Update);
         }
     }
 }
