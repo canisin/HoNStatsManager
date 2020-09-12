@@ -21,10 +21,11 @@ namespace HonStatsManager.Data
     {
         public static IEnumerable<MatchRecord> Parse(JToken token)
         {
-            return ((string) token[0]["history"])
+            return token.SelectMany(t =>
+                ((string) t["history"])
                 .Split(',')
                 .Select(item => item.Split('|'))
-                .Select(item => new MatchRecord(item.First(), ParseDate(item.Last())));
+                .Select(item => new MatchRecord(item.First(), ParseDate(item.Last()))));
         }
 
         private static DateTime ParseDate(string value)

@@ -105,11 +105,11 @@ namespace HonStatsManager.Analysis
             var heroStats = HeroDb.Heroes.ToDictionary(hero => hero.Id, hero => (Hero: hero, Picks: 0, Wins: 0));
             foreach (var result in results)
             {
-                var heroStat = heroStats[result.Hero.Id];
+                var heroStat = heroStats[result.HeroId];
                 ++heroStat.Picks;
                 if (result.Wins)
                     ++heroStat.Wins;
-                heroStats[result.Hero.Id] = heroStat;
+                heroStats[result.HeroId] = heroStat;
             }
 
             Logger.Log($"Total Hero Picks = {heroStats.Values.Sum(hero => hero.Picks)}");

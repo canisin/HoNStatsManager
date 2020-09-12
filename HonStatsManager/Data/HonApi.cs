@@ -28,9 +28,19 @@ namespace HonStatsManager.Data
         {
             Logger.Log($"Getting match history for {player.Nickname}");
 
-            var response = (JToken) Get($"match_history/public/accountid/{player.AccountId}");
-            return MatchHistory.Parse(response)
-                .Where(m => m.Date >= StatsEpoch);
+            var response = (JToken) Get($"match_history/all/accountid/{player.AccountId}");
+
+            if (response == null)
+            {
+                Logger.Log($"Failed to get match records for {player.Nickname}");
+                return Enumerable.Empty<MatchRecord>();
+            }
+
+            var matchRecords = MatchHistory.Parse(response).ToList();
+            Logger.Log($"{matchRecords.Count} match records");
+            matchRecords = matchRecords.Where(m => m.Date >= StatsEpoch).ToList();
+            Logger.Log($"{matchRecords.Count} match records past stats epoch");
+            return matchRecords;
         }
 
         public static IEnumerable<Match> GetMultiMatch(IEnumerable<MatchRecord> matchHistory)
@@ -42,23 +52,31 @@ namespace HonStatsManager.Data
 
             foreach (var bucket in matchHistory.SplitBy(MultiMatchBucketCount))
             {
-                var response = (JToken) Get($"multi_match/all/matchids/{string.Join("+", bucket.Select(m => m.Id))}");
-
-                timer.Update(bucket.Count);
-
-                if (response == null)
+                try
                 {
-                    continue;
-                }
+                    var response =
+                        (JToken) Get($"multi_match/all/matchids/{string.Join("+", bucket.Select(m => m.Id))}");
 
-                foreach (var matchRecord in bucket)
-                {
-                    if (!Match.CheckMatchId(response, matchRecord))
+                    if (response == null)
                     {
+                        Logger.Log("Empty response");
                         continue;
                     }
 
-                    yield return new Match(response, matchRecord);
+                    foreach (var matchRecord in bucket)
+                    {
+                        if (!Match.CheckMatchId(response, matchRecord))
+                        {
+                            Logger.Log($"Failed to retrieve {matchRecord.Id}");
+                            continue;
+                        }
+
+                        yield return new Match(response, matchRecord);
+                    }
+                }
+                finally
+                {
+                    timer.Update(bucket.Count);
                 }
             }
 

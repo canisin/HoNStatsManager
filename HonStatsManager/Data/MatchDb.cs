@@ -84,6 +84,12 @@ namespace HonStatsManager.Data
 
             var matches = HonApi.GetMultiMatch(newMatchRecords).OrderBy(m => m.Time).ToList();
 
+            if (!matches.Any())
+            {
+                Logger.Log("Failed to download matches.");
+                return;
+            }
+
             Logger.Log($"Matches downloaded: {matches.Count}");
             Logger.Log($"Last match: {matches.Last().Id} - {matches.Last().Time.ToLocalTime()}");
 

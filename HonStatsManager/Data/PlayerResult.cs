@@ -7,7 +7,7 @@ namespace HonStatsManager.Data
     {
         public Player Player { get; }
         public Team Team { get; }
-        public Hero Hero { get; }
+        public string HeroId { get; }
         public bool Wins { get; }
         public bool Losses { get; }
         public bool Concedes { get; }
@@ -15,12 +15,12 @@ namespace HonStatsManager.Data
         public bool Kicked { get; }
 
         [JsonConstructor]
-        public PlayerResult(Player player, Team team, Hero hero,
+        public PlayerResult(Player player, Team team, string heroId,
             bool wins, bool losses, bool concedes, bool discos, bool kicked)
         {
             Player = player;
             Team = team;
-            Hero = hero;
+            HeroId = heroId;
             Wins = wins;
             Losses = losses;
             Concedes = concedes;
@@ -32,7 +32,7 @@ namespace HonStatsManager.Data
         {
             Player = new Player(token);
             Team = ((int) token["team"]).ToTeam();
-            Hero = HeroDb.HeroDict[(string) token["hero_id"]];
+            HeroId = (string) token["hero_id"];
             Wins = (int) token["wins"] != 0;
             Losses = (int) token["losses"] != 0;
             Concedes = (int) token["concedes"] != 0;
