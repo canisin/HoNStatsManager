@@ -12,21 +12,23 @@ namespace HonStatsManager.Data
         public string Id { get; }
         public DateTime Time { get; }
         public TimeSpan Duration { get; }
-        public List<PlayerResult> PlayerResults { get; }
+        public DateTime GameNight { get; }
         public string Map { get; }
         public MatchType Type { get; }
+        public List<PlayerResult> PlayerResults { get; }
 
         [JsonConstructor]
-        public Match(string id, DateTime time, TimeSpan duration,
-            List<PlayerResult> playerResults,
-            string map, MatchType type)
+        public Match(string id, DateTime time, TimeSpan duration, DateTime gameNight,
+            string map, MatchType type,
+            List<PlayerResult> playerResults)
         {
             Id = id;
             Time = time;
             Duration = duration;
-            PlayerResults = playerResults;
+            GameNight = gameNight;
             Map = map;
             Type = type;
+            PlayerResults = playerResults;
         }
 
         public Match(JToken token, MatchRecord matchRecord)
@@ -39,10 +41,11 @@ namespace HonStatsManager.Data
             Id = matchRecord.Id;
             Time = TimeZoneInfo.ConvertTimeToUtc((DateTime) summary["mdt"], HonApi.TimeZone);
             Duration = TimeSpan.FromSeconds((int) summary["time_played"]);
-            PlayerResults = statistics.Select(t => new PlayerResult(t)).ToList();
             Map = (string) summary["map"];
+            PlayerResults = statistics.Select(t => new PlayerResult(t)).ToList();
 
-            Type = this.GetMatchType();
+            GameNight = this.CalcGameNight();
+            Type = this.CalcMatchType();
         }
 
         public bool CheckWinLossConsistency()

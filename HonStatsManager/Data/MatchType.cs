@@ -13,7 +13,7 @@ namespace HonStatsManager.Data
 
     internal static class MatchTypeExtensions
     {
-        public static MatchType GetMatchType(this Match match)
+        public static MatchType CalcMatchType(this Match match)
         {
             if (!match.PlayerResults.All(pr => Honzor.IsMember(pr.Player)))
             {
