@@ -30,6 +30,17 @@ namespace HonStatsManager.Interface
             Run(Analyzer.Run);
         }
 
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            if (keyData == Keys.Escape)
+            {
+                Close();
+                return true;
+            }
+
+            return base.ProcessDialogKey(keyData);
+        }
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);

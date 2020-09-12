@@ -59,6 +59,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this._runButton);
             this.Controls.Add(this._Console);
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "HoNzor Stats";
             this.ResumeLayout(false);
