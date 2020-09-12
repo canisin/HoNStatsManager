@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace HonStatsManager
+namespace HonStatsManager.Utility
 {
     internal static class EnumerableExtensions
     {

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace HonStatsManager
+namespace HonStatsManager.Data
 {
     internal class Player
     {

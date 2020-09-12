@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using HonStatsManager.Data;
+using HonStatsManager.Utility;
 
-namespace HonStatsManager
+namespace HonStatsManager.Analysis
 {
-    public static class Program
+    internal static class Analyzer
     {
-        public static void Main(string[] args)
-        {
-            MainImpl(args);
-            Console.WriteLine();
-            Console.WriteLine("Please press any key to continue...");
-            Console.ReadKey(true);
-        }
-
-        private static void MainImpl(string[] args)
+        public static void Run()
         {
             HeroDb.InitializeFromDisk();
             MatchDb.InitializeFromDisk();

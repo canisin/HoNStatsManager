@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using HonStatsManager.Utility;
 using Newtonsoft.Json;
 
-namespace HonStatsManager
+namespace HonStatsManager.Data
 {
     internal static class MatchDb
     {

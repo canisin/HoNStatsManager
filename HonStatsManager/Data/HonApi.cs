@@ -5,10 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using HonStatsManager.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace HonStatsManager
+namespace HonStatsManager.Data
 {
     internal static class HonApi
     {

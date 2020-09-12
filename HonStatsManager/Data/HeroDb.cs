@@ -3,9 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using HonStatsManager.Utility;
 using Newtonsoft.Json;
 
-namespace HonStatsManager
+namespace HonStatsManager.Data
 {
     internal static class HeroDb
     {

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using HonStatsManager.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace HonStatsManager
+namespace HonStatsManager.Data
 {
     internal class Match
     {

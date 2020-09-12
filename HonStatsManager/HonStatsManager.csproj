@@ -46,21 +46,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EnumerableExtensions.cs" />
-    <Compile Include="Hero.cs" />
-    <Compile Include="HeroDb.cs" />
-    <Compile Include="HonApi.cs" />
-    <Compile Include="Honzor.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="Match.cs" />
-    <Compile Include="MatchDb.cs" />
-    <Compile Include="MatchHistory.cs" />
-    <Compile Include="MatchType.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="PlayerResult.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Utility\EnumerableExtensions.cs" />
+    <Compile Include="Data\Hero.cs" />
+    <Compile Include="Data\HeroDb.cs" />
+    <Compile Include="Data\HonApi.cs" />
+    <Compile Include="Data\Honzor.cs" />
+    <Compile Include="Utility\Logger.cs" />
+    <Compile Include="Data\Match.cs" />
+    <Compile Include="Data\MatchDb.cs" />
+    <Compile Include="Data\MatchHistory.cs" />
+    <Compile Include="Data\MatchType.cs" />
+    <Compile Include="Data\Player.cs" />
+    <Compile Include="Data\PlayerResult.cs" />
+    <Compile Include="Analysis\Analyzer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Team.cs" />
+    <Compile Include="Data\Team.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

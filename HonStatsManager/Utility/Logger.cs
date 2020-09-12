@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace HonStatsManager
+namespace HonStatsManager.Utility
 {
     [Flags]
     internal enum LogTarget

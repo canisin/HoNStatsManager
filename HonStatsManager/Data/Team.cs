@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HonStatsManager
+namespace HonStatsManager.Data
 {
     public enum Team
     {

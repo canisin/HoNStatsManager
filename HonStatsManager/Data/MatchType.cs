@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace HonStatsManager
+namespace HonStatsManager.Data
 {
     internal enum MatchType
     {

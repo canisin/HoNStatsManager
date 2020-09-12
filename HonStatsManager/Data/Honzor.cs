@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using HonStatsManager.Utility;
 
-namespace HonStatsManager
+namespace HonStatsManager.Data
 {
     internal static class Honzor
     {
