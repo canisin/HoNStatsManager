@@ -9,19 +9,18 @@ namespace HonStatsManager.Utility
         None = 0,
         Console = 1,
         File = 2,
-        Both = Console | File
+        Main = 4,
+        Default = File | Main,
+        Debug = File
     }
 
     internal static class Logger
     {
-        public static readonly LogTarget Target = LogTarget.Both;
-
         public const string FileName = @"log.txt";
 
         static Logger()
         {
-            if (Target.HasFlag(LogTarget.File))
-                File.Delete(FileName);
+            File.Delete(FileName);
 
             Log($"Hon Stats Manager - {DateTime.Now}");
             Log();
@@ -29,13 +28,22 @@ namespace HonStatsManager.Utility
 
         public static void Log() => Log("");
 
-        public static void Log(object log)
+        public static void Log(object log) => LogImpl(log, LogTarget.Default);
+
+        public static void LogDebug() => LogDebug("");
+
+        public static void LogDebug(object log) => LogImpl(log, LogTarget.Debug);
+
+        private static void LogImpl(object log, LogTarget target)
         {
-            if (Target.HasFlag(LogTarget.Console))
+            if (target.HasFlag(LogTarget.Console))
                 Console.WriteLine(log);
 
-            if (Target.HasFlag(LogTarget.File))
+            if (target.HasFlag(LogTarget.File))
                 File.AppendAllLines(FileName, new[] {log.ToString()});
+
+            if (target.HasFlag(LogTarget.Main))
+                Program.MainForm.WriteLine(log.ToString());
         }
     }
 }

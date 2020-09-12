@@ -13,8 +13,8 @@ namespace HonStatsManager.Analysis
             HeroDb.InitializeFromDisk();
             MatchDb.InitializeFromDisk();
 
-            Console.WriteLine($"First Match: {MatchDb.Matches.First().Time.ToLocalTime()}");
-            Console.WriteLine($"Last Match: {MatchDb.Matches.Last().Time.ToLocalTime()}");
+            Logger.Log($"First Match: {MatchDb.Matches.First().Time.ToLocalTime()}");
+            Logger.Log($"Last Match: {MatchDb.Matches.Last().Time.ToLocalTime()}");
 
             Logger.Log("Filtering matches with win/loss inconsistencies..");
             MatchDb.FilterMatches(match => match.CheckWinLossConsistency());
@@ -35,24 +35,24 @@ namespace HonStatsManager.Analysis
 
         private static void PrintMapStats()
         {
-            Console.WriteLine();
-            Console.WriteLine();
+            Logger.Log();
+            Logger.Log();
             PrintTitle("Map Stats");
             foreach (var mapGroup in MatchDb.Matches
                 .GroupBy(m => m.Map))
             {
-                Console.WriteLine($"{mapGroup.First().Map}: {mapGroup.Count()} matches");
+                Logger.Log($"{mapGroup.First().Map}: {mapGroup.Count()} matches");
             }
         }
 
         private static void PrintMatchTypeStats()
         {
-            Console.WriteLine();
-            Console.WriteLine();
+            Logger.Log();
+            Logger.Log();
             PrintTitle("Match Stats");
             foreach (var matchType in Enum.GetValues(typeof(MatchType)).Cast<MatchType>())
             {
-                Console.WriteLine($"{matchType}: {MatchDb.Matches.Count(m => m.Type == matchType)} matches");
+                Logger.Log($"{matchType}: {MatchDb.Matches.Count(m => m.Type == matchType)} matches");
             }
         }
 
@@ -62,8 +62,8 @@ namespace HonStatsManager.Analysis
                 .GroupBy(m => m.Type)
                 .OrderBy(mg => mg.Key))
             {
-                Console.WriteLine();
-                Console.WriteLine();
+                Logger.Log();
+                Logger.Log();
                 PrintTitle(matchGroupGroup.Key.ToString());
                 foreach (var matchGroup in matchGroupGroup
                     .Select(m => m.GetTeams())
@@ -78,25 +78,25 @@ namespace HonStatsManager.Analysis
                     var team1Ratio = (double) team1Wins / totalMatches;
                     var team2Ratio = (double) team2Wins / totalMatches;
 
-                    Console.WriteLine();
-                    Console.WriteLine($"{matchGroup.Key} -> {totalMatches} matches");
-                    Console.WriteLine($"{team1}: {team1Wins} wins ({team1Ratio:P})");
-                    Console.WriteLine($"{team2}: {team2Wins} wins ({team2Ratio:P})");
+                    Logger.Log();
+                    Logger.Log($"{matchGroup.Key} -> {totalMatches} matches");
+                    Logger.Log($"{team1}: {team1Wins} wins ({team1Ratio:P})");
+                    Logger.Log($"{team2}: {team2Wins} wins ({team2Ratio:P})");
                 }
             }
         }
 
         private static void PrintHeroStats()
         {
-            Console.WriteLine();
-            Console.WriteLine();
+            Logger.Log();
+            Logger.Log();
             PrintTitle("Hero Stats");
             PrintHeroStatsImpl(MatchDb.Matches.SelectMany(m => m.PlayerResults), 1);
 
             foreach (var player in Honzor.Players)
             {
-                Console.WriteLine();
-                Console.WriteLine();
+                Logger.Log();
+                Logger.Log();
                 PrintTitle($"{player.Nickname}'s Hero Stats");
                 PrintHeroStatsImpl(MatchDb.Matches.SelectMany(m => m.PlayerResults)
                     .Where(r => r.Player.Nickname == player.Nickname), 5);
@@ -115,14 +115,14 @@ namespace HonStatsManager.Analysis
                 heroStats[result.Hero.Id] = heroStat;
             }
 
-            Console.WriteLine($"Total Hero Picks = {heroStats.Values.Sum(hero => hero.Picks)}");
+            Logger.Log($"Total Hero Picks = {heroStats.Values.Sum(hero => hero.Picks)}");
 
             foreach (var (hero, picks, wins) in heroStats.Values
                 //.OrderByDescending(heroStat => (double) heroStat.Wins / heroStat.Picks))
                 .OrderByDescending(heroStat => heroStat.Picks)
                 .Where(heroStat => heroStat.Picks >= minPicks))
             {
-                Console.WriteLine($"{hero.Name}: {wins}/{picks} ({(double) wins / picks * 100:#.}%)");
+                Logger.Log($"{hero.Name}: {wins}/{picks} ({(double) wins / picks * 100:#.}%)");
             }
         }
 
@@ -131,8 +131,8 @@ namespace HonStatsManager.Analysis
             title = $"=={title}==";
             var underline = Enumerable.Repeat('=', title.Length).StringJoin();
 
-            Console.WriteLine(title);
-            Console.WriteLine(underline);
+            Logger.Log(title);
+            Logger.Log(underline);
         }
     }
 }
