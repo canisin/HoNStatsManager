@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analysis\FilterType.cs" />
+    <Compile Include="Data\Map.cs" />
     <Compile Include="Interface\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

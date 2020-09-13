@@ -45,15 +45,15 @@ namespace HonStatsManager.Analysis
             return ret;
         }
 
-        public static List<string> GetFilteredMaps(this FilterType filters)
+        public static List<Map> GetFilteredMaps(this FilterType filters)
         {
-            var ret = new List<string>();
+            var ret = new List<Map>();
 
             if (filters.HasFlag(FilterType.MapCaldavar))
-                ret.Add("caldavar");
+                ret.Add(Map.Caldavar);
 
             if (filters.HasFlag(FilterType.MapMidwars))
-                ret.Add("midwars");
+                ret.Add(Map.Midwars);
 
             return ret;
         }

@@ -13,13 +13,13 @@ namespace HonStatsManager.Data
         public DateTime Time { get; }
         public TimeSpan Duration { get; }
         public DateTime GameNight { get; }
-        public string Map { get; }
+        public Map Map { get; }
         public MatchType Type { get; }
         public List<PlayerResult> PlayerResults { get; }
 
         [JsonConstructor]
         public Match(string id, DateTime time, TimeSpan duration, DateTime gameNight,
-            string map, MatchType type,
+            Map map, MatchType type,
             List<PlayerResult> playerResults)
         {
             Id = id;
@@ -41,7 +41,7 @@ namespace HonStatsManager.Data
             Id = matchRecord.Id;
             Time = TimeZoneInfo.ConvertTimeToUtc((DateTime) summary["mdt"], HonApi.TimeZone);
             Duration = TimeSpan.FromSeconds((int) summary["time_played"]);
-            Map = (string) summary["map"];
+            Map = ((string) summary["map"]).ToMap();
             PlayerResults = statistics.Select(t => new PlayerResult(t)).ToList();
 
             GameNight = this.CalcGameNight();
