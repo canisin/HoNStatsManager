@@ -105,33 +105,21 @@ namespace HonStatsManager.Interface
 
         private void OnMatchesReloadMenuClick(object sender, EventArgs e)
         {
-            if (_isBusy)
-                throw new InvalidOperationException();
-
             Run(MatchDb.Reload);
         }
 
         private void OnMatchesUpdateMenuClick(object sender, EventArgs e)
         {
-            if (_isBusy)
-                throw new InvalidOperationException();
-
             Run(MatchDb.Update);
         }
 
         private void OnMatchesResetMenuClick(object sender, EventArgs e)
         {
-            if (_isBusy)
-                throw new InvalidOperationException();
-
             Run(MatchDb.Reset);
         }
 
         private void OnHeroesUpdateMenuClick(object sender, EventArgs e)
         {
-            if (_isBusy)
-                throw new InvalidOperationException();
-
             Run(HeroDb.Update);
         }
 
