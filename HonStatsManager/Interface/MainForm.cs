@@ -174,7 +174,7 @@ namespace HonStatsManager.Interface
             ClearFilters();
 
             _filterMatchTypeOneVsOneButton.Checked = true;
-            _filterMatchTypeOneVsOneButton.Checked = true;
+            _filterMatchTypeTwoVsOneButton.Checked = true;
             _filterMatchTypeOtherButton.Checked = true;
             _filterMapCaldavarButton.Checked = true;
             _filterDataKicksButton.Checked = true;
