@@ -17,6 +17,11 @@ namespace HonStatsManager.Utility
             return seq.Contains(item);
         }
 
+        public static bool KeyIn<TKey, TValue>(this TKey key, IReadOnlyDictionary<TKey, TValue> seq)
+        {
+            return seq.ContainsKey(key);
+        }
+
         public static IEnumerable<List<T>> SplitBy<T>(this IEnumerable<T> seq, int splitCount)
         {
             if (splitCount <= 0)

@@ -8,32 +8,35 @@ namespace HonStatsManager.Analysis
 {
     internal static class Analyzer
     {
-        public static void Run()
+        private static void ApplyFilters()
         {
-            Logger.Log($"First Match: {MatchDb.Matches.First().Time.ToLocalTime()}");
-            Logger.Log($"Last Match: {MatchDb.Matches.Last().Time.ToLocalTime()}");
+            var filters = Program.MainForm.GetFilters();
 
-            Logger.Log("Filtering matches with win/loss inconsistencies..");
-            MatchDb.FilterMatches(match => match.CheckWinLossConsistency());
+            MatchDb.FilterMatches(m => !m.Type.In(filters.GetFilteredMatchTypes()));
 
-            PrintMapStats();
+            MatchDb.FilterMatches(m => !m.Map.In(filters.GetFilteredMaps()));
 
-            Logger.Log("Filtering matches other than Midwars matches..");
-            MatchDb.FilterMatches(match => match.Map == "midwars");
+            if (filters.HasFlag(FilterType.DataKicks))
+                MatchDb.FilterMatches(m => !m.PlayerResults.Any(r => r.Kicked));
 
-            PrintMatchTypeStats();
+            if (filters.HasFlag(FilterType.DataDiscos))
+                MatchDb.FilterMatches(m => !m.PlayerResults.Any(r => r.Discos));
 
-            Logger.Log("Filtering matches other than 2v2 and 3v2's..");
-            MatchDb.FilterMatches(match => match.Type.In(MatchType.TwoVsTwo, MatchType.ThreeVsTwo));
+            if (filters.HasFlag(FilterType.DataIncomplete))
+                MatchDb.FilterMatches(m => !m.PlayerResults.Any(r => r.Wins));
 
-            PrintPlayerStats();
-            PrintHeroStats();
+            if (filters.HasFlag(FilterType.DataMissingHeroes))
+                MatchDb.FilterMatches(m => m.PlayerResults.All(r => r.HeroId.KeyIn(HeroDb.HeroDict)));
         }
 
-        private static void PrintMapStats()
+        public static void PrintMapStats()
         {
             Logger.Log();
             Logger.Log();
+            MatchDb.Reload();
+            ApplyFilters();
+            Logger.Log();
+
             PrintTitle("Map Stats");
             foreach (var mapGroup in MatchDb.Matches
                 .GroupBy(m => m.Map))
@@ -42,10 +45,14 @@ namespace HonStatsManager.Analysis
             }
         }
 
-        private static void PrintMatchTypeStats()
+        public static void PrintMatchTypeStats()
         {
             Logger.Log();
             Logger.Log();
+            MatchDb.Reload();
+            ApplyFilters();
+            Logger.Log();
+
             PrintTitle("Match Stats");
             foreach (var matchType in Enum.GetValues(typeof(MatchType)).Cast<MatchType>())
             {
@@ -53,8 +60,14 @@ namespace HonStatsManager.Analysis
             }
         }
 
-        private static void PrintPlayerStats()
+        public static void PrintPlayerStats()
         {
+            Logger.Log();
+            Logger.Log();
+            MatchDb.Reload();
+            ApplyFilters();
+            Logger.Log();
+
             foreach (var matchGroupGroup in MatchDb.Matches
                 .GroupBy(m => m.Type)
                 .OrderBy(mg => mg.Key))
@@ -83,10 +96,14 @@ namespace HonStatsManager.Analysis
             }
         }
 
-        private static void PrintHeroStats()
+        public static void PrintHeroStats()
         {
             Logger.Log();
             Logger.Log();
+            MatchDb.Reload();
+            ApplyFilters();
+            Logger.Log();
+
             PrintTitle("Hero Stats");
             PrintHeroStatsImpl(MatchDb.Matches.SelectMany(m => m.PlayerResults), 1);
 
