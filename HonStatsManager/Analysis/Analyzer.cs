@@ -12,21 +12,43 @@ namespace HonStatsManager.Analysis
         {
             var filters = Program.MainForm.GetFilters();
 
-            MatchDb.FilterMatches(m => !m.Type.In(filters.GetFilteredMatchTypes()));
+            var filteredMatchTypes = filters.GetFilteredMatchTypes();
+            if (filteredMatchTypes.Any())
+            {
+                Logger.Log("Filtering match types..");
+                MatchDb.FilterMatches(m => !m.Type.In(filteredMatchTypes));
+            }
 
-            MatchDb.FilterMatches(m => !m.Map.In(filters.GetFilteredMaps()));
+            var filteredMaps = filters.GetFilteredMaps();
+            if (filteredMaps.Any())
+            {
+                Logger.Log("Filtering maps..");
+                MatchDb.FilterMatches(m => !m.Map.In(filteredMaps));
+            }
 
             if (filters.HasFlag(FilterType.DataKicks))
+            {
+                Logger.Log("Filtering matches with kicked players..");
                 MatchDb.FilterMatches(m => !m.PlayerResults.Any(r => r.Kicked));
+            }
 
             if (filters.HasFlag(FilterType.DataDiscos))
+            {
+                Logger.Log("Filtering matches with disconnected players..");
                 MatchDb.FilterMatches(m => !m.PlayerResults.Any(r => r.Discos));
+            }
 
             if (filters.HasFlag(FilterType.DataIncomplete))
+            {
+                Logger.Log("Filtering incomplete matches..");
                 MatchDb.FilterMatches(m => !m.PlayerResults.Any(r => r.Wins));
+            }
 
             if (filters.HasFlag(FilterType.DataMissingHeroes))
+            {
+                Logger.Log("Filtering matches with missing hero information..");
                 MatchDb.FilterMatches(m => m.PlayerResults.All(r => r.HeroId.KeyIn(HeroDb.HeroDict)));
+            }
         }
 
         public static void PrintMapStats()
