@@ -61,6 +61,9 @@
             // 
             // _console
             // 
+            this._console.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._console.Location = new System.Drawing.Point(12, 200);
             this._console.Multiline = true;
             this._console.Name = "_console";
@@ -136,6 +139,8 @@
             // 
             // _filtersGroup
             // 
+            this._filtersGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._filtersGroup.Controls.Add(this._clearFiltersButton);
             this._filtersGroup.Controls.Add(this._filterDataMissingHerosButton);
             this._filtersGroup.Controls.Add(this._filterDataIncompleteButton);
@@ -158,6 +163,7 @@
             // 
             // _clearFiltersButton
             // 
+            this._clearFiltersButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this._clearFiltersButton.Location = new System.Drawing.Point(695, 78);
             this._clearFiltersButton.Name = "_clearFiltersButton";
             this._clearFiltersButton.Size = new System.Drawing.Size(75, 23);
@@ -188,6 +194,7 @@
             // 
             // _resetFiltersButton
             // 
+            this._resetFiltersButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this._resetFiltersButton.Location = new System.Drawing.Point(695, 107);
             this._resetFiltersButton.Name = "_resetFiltersButton";
             this._resetFiltersButton.Size = new System.Drawing.Size(75, 23);
@@ -339,7 +346,6 @@
             this.Controls.Add(this._console);
             this.Controls.Add(this._menu);
             this.MainMenuStrip = this._menu;
-            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "HoNzor Stats";
             this._menu.ResumeLayout(false);

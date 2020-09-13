@@ -21,6 +21,8 @@ namespace HonStatsManager.Interface
         {
             base.OnShown(e);
 
+            MinimumSize = Size;
+
             Logger.Initialize();
             HeroDb.Initialize();
             MatchDb.Initialize();
