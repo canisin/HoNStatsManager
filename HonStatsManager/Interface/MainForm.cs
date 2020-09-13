@@ -82,10 +82,18 @@ namespace HonStatsManager.Interface
                 throw new InvalidOperationException();
 
             _isBusy = isBusy;
+
             _matchesReloadMenu.Enabled = !_isBusy;
             _matchesUpdateMenu.Enabled = !_isBusy;
             _matchesResetMenu.Enabled = !_isBusy;
             _heroesUpdateMenu.Enabled = !_isBusy;
+
+            foreach (var checkBox in _filtersGroup.Controls.OfType<CheckBox>())
+                checkBox.Enabled = !_isBusy;
+
+            _clearFiltersButton.Enabled = !_isBusy;
+            _resetFiltersButton.Enabled = !_isBusy;
+
             _mapStatsButton.Enabled = !_isBusy;
             _typeStatsButton.Enabled = !_isBusy;
             _playerStatsButton.Enabled = !_isBusy;
