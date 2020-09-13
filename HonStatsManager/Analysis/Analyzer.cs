@@ -41,7 +41,7 @@ namespace HonStatsManager.Analysis
             if (filters.HasFlag(FilterType.DataIncomplete))
             {
                 Logger.Log("Filtering incomplete matches..");
-                MatchDb.FilterMatches(m => !m.PlayerResults.Any(r => r.Wins));
+                MatchDb.FilterMatches(m => m.PlayerResults.Any(r => r.Wins));
             }
 
             if (filters.HasFlag(FilterType.DataMissingHeroes))
