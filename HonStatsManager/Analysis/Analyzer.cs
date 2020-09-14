@@ -167,7 +167,7 @@ namespace HonStatsManager.Analysis
                 .OrderByDescending(heroStat => heroStat.Picks)
                 .Where(heroStat => heroStat.Picks >= minPicks))
             {
-                Logger.Log($"{hero.Name}: {wins}/{picks} ({(double) wins / picks * 100:#.}%)");
+                Logger.Log($"{hero.Name, -20}: {wins,2}/{picks,-2} ({(double) wins / picks:P0})");
             }
         }
 
@@ -191,7 +191,7 @@ namespace HonStatsManager.Analysis
                     Logger.Log(
                         $"{monthGroup.First().Key:MMMM yyyy} ({monthGroup.Sum(nightGroup => nightGroup.Count())} matches):");
                     foreach (var nightGroup in monthGroup)
-                        Logger.Log($" {nightGroup.Key:D}: {nightGroup.Count()} matches");
+                        Logger.Log($" {nightGroup.Key,-25:D}: {nightGroup.Count(),2} matches");
 
                     Logger.Log();
                 }
@@ -212,7 +212,7 @@ namespace HonStatsManager.Analysis
             {
                 Logger.Log($"{yearGroup.Key} ({yearGroup.Sum(monthGroup => monthGroup.Count())} matches):");
                 foreach (var monthGroup in yearGroup)
-                    Logger.Log($" {monthGroup.First().GameNight:MMMM yyyy}: {monthGroup.Count()} matches");
+                    Logger.Log($" {monthGroup.First().GameNight,-12:MMMM yyyy}: {monthGroup.Count(),3} matches");
 
                 Logger.Log();
             }
@@ -227,7 +227,7 @@ namespace HonStatsManager.Analysis
             foreach (var yearGroup in _matches
                 .GroupBy(m => m.GameNight.Year))
             {
-                Logger.Log($"{yearGroup.Key}: {yearGroup.Count()} matches");
+                Logger.Log($"{yearGroup.Key}: {yearGroup.Count(),4} matches");
             }
         }
 
