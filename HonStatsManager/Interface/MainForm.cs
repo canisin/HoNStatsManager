@@ -16,12 +16,8 @@ namespace HonStatsManager.Interface
         {
             InitializeComponent();
 
-            _heroStatsButton.Menu = new ContextMenuStrip {ShowImageMargin = false};
-            _heroStatsButton.Menu.ItemClicked += OnHeroStatsButtonItemClicked;
             foreach (var player in Honzor.Players)
                 _heroStatsButton.Menu.Items.Add(player.Nickname);
-            _heroStatsButton.Menu.Items.Add(new ToolStripSeparator());
-            _heroStatsButton.Menu.Items.Add("All");
         }
 
         protected override void OnShown(EventArgs e)
@@ -150,18 +146,18 @@ namespace HonStatsManager.Interface
             Run(() => new Analyzer().PrintPlayerStats());
         }
 
-        private void OnHeroStatsButtonItemClicked(object sender, EventArgs e)
+        private void OnHeroStatsButtonItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            Run(() =>
-            {
-                var clickedItemText = ((ToolStripItemClickedEventArgs) e).ClickedItem.Text;
-                var player = Honzor.Players.SingleOrDefault(p => p.Nickname == clickedItemText);
+            var player = Honzor.Players.SingleOrDefault(p => p.Nickname == e.ClickedItem.Text);
+            if (player == null)
+                return;
 
-                if (player != null)
-                    new Analyzer().PrintPlayerHeroStats(player);
-                else
-                    new Analyzer().PrintAllHeroStats();
-            });
+            Run(() => new Analyzer().PrintPlayerHeroStats(player));
+        }
+
+        private void OnHeroStatsMenuAllClick(object sender, EventArgs e)
+        {
+            Run(() => new Analyzer().PrintAllHeroStats());
         }
 
         private void OnClearFiltersButtonClick(object sender, EventArgs e)

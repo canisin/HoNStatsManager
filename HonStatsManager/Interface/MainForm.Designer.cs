@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this._console = new System.Windows.Forms.TextBox();
             this._menu = new System.Windows.Forms.MenuStrip();
             this._databasesMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,8 +55,12 @@
             this._typeStatsButton = new System.Windows.Forms.Button();
             this._playerStatsButton = new System.Windows.Forms.Button();
             this._heroStatsButton = new HonStatsManager.Interface.MenuButton();
+            this._heroStatsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this._heroStatsMenuAllItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this._menu.SuspendLayout();
             this._filtersGroup.SuspendLayout();
+            this._heroStatsMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // _console
@@ -317,14 +322,34 @@
             // _heroStatsButton
             // 
             this._heroStatsButton.Location = new System.Drawing.Point(255, 171);
-            this._heroStatsButton.Menu = null;
+            this._heroStatsButton.Menu = this._heroStatsMenu;
             this._heroStatsButton.Name = "_heroStatsButton";
-            this._heroStatsButton.ShowMenuUnderCursor = false;
             this._heroStatsButton.Size = new System.Drawing.Size(75, 23);
             this._heroStatsButton.TabIndex = 5;
             this._heroStatsButton.Text = "Hero Stats";
             this._heroStatsButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this._heroStatsButton.UseVisualStyleBackColor = true;
+            // 
+            // _heroStatsMenu
+            // 
+            this._heroStatsMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._heroStatsMenuAllItem,
+            this.toolStripSeparator1});
+            this._heroStatsMenu.Name = "_heroStatsMenu";
+            this._heroStatsMenu.Size = new System.Drawing.Size(181, 54);
+            this._heroStatsMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.OnHeroStatsButtonItemClicked);
+            // 
+            // _heroStatsMenuAllItem
+            // 
+            this._heroStatsMenuAllItem.Name = "_heroStatsMenuAllItem";
+            this._heroStatsMenuAllItem.Size = new System.Drawing.Size(180, 22);
+            this._heroStatsMenuAllItem.Text = "All";
+            this._heroStatsMenuAllItem.Click += new System.EventHandler(this.OnHeroStatsMenuAllClick);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // MainForm
             // 
@@ -345,6 +370,7 @@
             this._menu.PerformLayout();
             this._filtersGroup.ResumeLayout(false);
             this._filtersGroup.PerformLayout();
+            this._heroStatsMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -377,5 +403,8 @@
         private System.Windows.Forms.Button _playerStatsButton;
         private MenuButton _heroStatsButton;
         private System.Windows.Forms.Button _clearFiltersButton;
+        private System.Windows.Forms.ContextMenuStrip _heroStatsMenu;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem _heroStatsMenuAllItem;
     }
 }

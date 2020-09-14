@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace HonStatsManager.Interface
@@ -7,7 +8,10 @@ namespace HonStatsManager.Interface
 
     public class MenuButton : Button
     {
+        [DefaultValue(null)]
         public ContextMenuStrip Menu { get; set; }
+
+        [DefaultValue(false)]
         public bool ShowMenuUnderCursor { get; set; }
 
         protected override void OnMouseDown(MouseEventArgs mouseEvent)
