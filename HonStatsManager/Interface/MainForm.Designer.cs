@@ -54,15 +54,15 @@
             this._mapStatsButton = new System.Windows.Forms.Button();
             this._typeStatsButton = new System.Windows.Forms.Button();
             this._playerStatsButton = new System.Windows.Forms.Button();
-            this._heroStatsButton = new HonStatsManager.Interface.MenuButton();
             this._heroStatsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this._heroStatsMenuAllItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this._gameNightStatsButton = new HonStatsManager.Interface.MenuButton();
             this._gameNightStatsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this._gameNightStatsMenuDailyItem = new System.Windows.Forms.ToolStripMenuItem();
             this._gameNightStatsMenuMonthlyItem = new System.Windows.Forms.ToolStripMenuItem();
             this._gameNightStatsMenuYearlyItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._gameNightStatsButton = new HonStatsManager.Interface.MenuButton();
+            this._heroStatsButton = new HonStatsManager.Interface.MenuButton();
             this._menu.SuspendLayout();
             this._filtersGroup.SuspendLayout();
             this._heroStatsMenu.SuspendLayout();
@@ -74,12 +74,12 @@
             this._console.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this._console.Location = new System.Drawing.Point(12, 200);
+            this._console.Location = new System.Drawing.Point(12, 227);
             this._console.Multiline = true;
             this._console.Name = "_console";
             this._console.ReadOnly = true;
             this._console.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this._console.Size = new System.Drawing.Size(776, 460);
+            this._console.Size = new System.Drawing.Size(776, 433);
             this._console.TabIndex = 7;
             // 
             // _menu
@@ -299,7 +299,7 @@
             // 
             this._mapStatsButton.Location = new System.Drawing.Point(12, 171);
             this._mapStatsButton.Name = "_mapStatsButton";
-            this._mapStatsButton.Size = new System.Drawing.Size(75, 23);
+            this._mapStatsButton.Size = new System.Drawing.Size(75, 50);
             this._mapStatsButton.TabIndex = 2;
             this._mapStatsButton.Text = "Map Stats";
             this._mapStatsButton.UseVisualStyleBackColor = true;
@@ -309,7 +309,7 @@
             // 
             this._typeStatsButton.Location = new System.Drawing.Point(93, 171);
             this._typeStatsButton.Name = "_typeStatsButton";
-            this._typeStatsButton.Size = new System.Drawing.Size(75, 23);
+            this._typeStatsButton.Size = new System.Drawing.Size(75, 50);
             this._typeStatsButton.TabIndex = 3;
             this._typeStatsButton.Text = "Type Stats";
             this._typeStatsButton.UseVisualStyleBackColor = true;
@@ -319,22 +319,11 @@
             // 
             this._playerStatsButton.Location = new System.Drawing.Point(174, 171);
             this._playerStatsButton.Name = "_playerStatsButton";
-            this._playerStatsButton.Size = new System.Drawing.Size(75, 23);
+            this._playerStatsButton.Size = new System.Drawing.Size(75, 50);
             this._playerStatsButton.TabIndex = 4;
             this._playerStatsButton.Text = "Player Stats";
             this._playerStatsButton.UseVisualStyleBackColor = true;
             this._playerStatsButton.Click += new System.EventHandler(this.OnPlayerStatsButtonClick);
-            // 
-            // _heroStatsButton
-            // 
-            this._heroStatsButton.Location = new System.Drawing.Point(255, 171);
-            this._heroStatsButton.Menu = this._heroStatsMenu;
-            this._heroStatsButton.Name = "_heroStatsButton";
-            this._heroStatsButton.Size = new System.Drawing.Size(75, 23);
-            this._heroStatsButton.TabIndex = 5;
-            this._heroStatsButton.Text = "Hero Stats";
-            this._heroStatsButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._heroStatsButton.UseVisualStyleBackColor = true;
             // 
             // _heroStatsMenu
             // 
@@ -356,17 +345,6 @@
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(85, 6);
-            // 
-            // _gameNightStatsButton
-            // 
-            this._gameNightStatsButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._gameNightStatsButton.Location = new System.Drawing.Point(336, 171);
-            this._gameNightStatsButton.Menu = this._gameNightStatsMenu;
-            this._gameNightStatsButton.Name = "_gameNightStatsButton";
-            this._gameNightStatsButton.Size = new System.Drawing.Size(75, 23);
-            this._gameNightStatsButton.TabIndex = 6;
-            this._gameNightStatsButton.Text = "Game Night Stats";
-            this._gameNightStatsButton.UseVisualStyleBackColor = true;
             // 
             // _gameNightStatsMenu
             // 
@@ -397,6 +375,29 @@
             this._gameNightStatsMenuYearlyItem.Size = new System.Drawing.Size(119, 22);
             this._gameNightStatsMenuYearlyItem.Text = "Yearly";
             this._gameNightStatsMenuYearlyItem.Click += new System.EventHandler(this.OnGameNightStatsMenuYearlyClick);
+            // 
+            // _gameNightStatsButton
+            // 
+            this._gameNightStatsButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._gameNightStatsButton.Location = new System.Drawing.Point(336, 171);
+            this._gameNightStatsButton.Menu = this._gameNightStatsMenu;
+            this._gameNightStatsButton.Name = "_gameNightStatsButton";
+            this._gameNightStatsButton.Size = new System.Drawing.Size(75, 50);
+            this._gameNightStatsButton.TabIndex = 6;
+            this._gameNightStatsButton.Text = "Game Night Stats";
+            this._gameNightStatsButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._gameNightStatsButton.UseVisualStyleBackColor = true;
+            // 
+            // _heroStatsButton
+            // 
+            this._heroStatsButton.Location = new System.Drawing.Point(255, 171);
+            this._heroStatsButton.Menu = this._heroStatsMenu;
+            this._heroStatsButton.Name = "_heroStatsButton";
+            this._heroStatsButton.Size = new System.Drawing.Size(75, 50);
+            this._heroStatsButton.TabIndex = 5;
+            this._heroStatsButton.Text = "Hero Stats";
+            this._heroStatsButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._heroStatsButton.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 

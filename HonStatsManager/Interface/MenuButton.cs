@@ -32,15 +32,15 @@ namespace HonStatsManager.Interface
             if (Menu == null)
                 return;
 
-            var arrowX = ClientRectangle.Width - 14;
-            var arrowY = ClientRectangle.Height / 2 - 1;
+            var arrowX = ClientRectangle.Width - 8;
+            var arrowY = ClientRectangle.Height - 8;
 
             var brush = Enabled ? SystemBrushes.ControlText : SystemBrushes.ControlDark;
             var arrows = new[]
             {
-                new Point(arrowX, arrowY),
-                new Point(arrowX + 7, arrowY),
-                new Point(arrowX + 3, arrowY + 4)
+                new Point(arrowX - 3, arrowY - 1),
+                new Point(arrowX + 4, arrowY - 1),
+                new Point(arrowX, arrowY + 3)
             };
             paintEvent.Graphics.FillPolygon(brush, arrows);
         }
