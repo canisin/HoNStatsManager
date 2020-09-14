@@ -19,6 +19,12 @@ namespace HonStatsManager.Analysis
         {
             var filters = Program.MainForm.GetFilters();
 
+            if (filters == FilterType.None)
+            {
+                Logger.Log("No filters selected.");
+                return;
+            }
+
             var filteredMatchTypes = filters.GetFilteredMatchTypes();
             if (filteredMatchTypes.Any())
             {
@@ -67,8 +73,6 @@ namespace HonStatsManager.Analysis
 
         public void PrintMapStats()
         {
-            Logger.Log();
-            Logger.Log();
             ApplyFilters();
             Logger.Log();
 
@@ -82,8 +86,6 @@ namespace HonStatsManager.Analysis
 
         public void PrintMatchTypeStats()
         {
-            Logger.Log();
-            Logger.Log();
             ApplyFilters();
             Logger.Log();
 
@@ -96,8 +98,6 @@ namespace HonStatsManager.Analysis
 
         public void PrintPlayerStats()
         {
-            Logger.Log();
-            Logger.Log();
             ApplyFilters();
             Logger.Log();
 
@@ -131,8 +131,6 @@ namespace HonStatsManager.Analysis
 
         public void PrintHeroStats()
         {
-            Logger.Log();
-            Logger.Log();
             ApplyFilters();
             Logger.Log();
 

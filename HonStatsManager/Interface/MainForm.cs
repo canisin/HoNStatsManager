@@ -51,6 +51,9 @@ namespace HonStatsManager.Interface
 
         private void Run(Action action)
         {
+            Logger.Log();
+            Logger.Log();
+
             SetBusy(true);
             Task.Factory.StartNew(() =>
             {
