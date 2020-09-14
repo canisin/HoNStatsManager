@@ -129,22 +129,23 @@ namespace HonStatsManager.Analysis
             }
         }
 
-        public void PrintHeroStats()
+        public void PrintAllHeroStats()
         {
             ApplyFilters();
             Logger.Log();
 
             PrintTitle("Hero Stats");
             PrintHeroStatsImpl(_matches.SelectMany(m => m.PlayerResults), 1);
+        }
 
-            foreach (var player in Honzor.Players)
-            {
-                Logger.Log();
-                Logger.Log();
-                PrintTitle($"{player.Nickname}'s Hero Stats");
-                PrintHeroStatsImpl(_matches.SelectMany(m => m.PlayerResults)
-                    .Where(r => r.Player.Nickname == player.Nickname), 5);
-            }
+        public void PrintPlayerHeroStats(Player player)
+        {
+            ApplyFilters();
+            Logger.Log();
+
+            PrintTitle($"{player.Nickname}'s Hero Stats");
+            PrintHeroStatsImpl(_matches.SelectMany(m => m.PlayerResults)
+                .Where(r => r.Player.Nickname == player.Nickname), 5);
         }
 
         private static void PrintHeroStatsImpl(IEnumerable<PlayerResult> results, int minPicks)

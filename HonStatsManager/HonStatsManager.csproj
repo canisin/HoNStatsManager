@@ -56,6 +56,9 @@
     <Compile Include="Interface\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interface\MenuButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Utility\EnumerableExtensions.cs" />
     <Compile Include="Data\Hero.cs" />
