@@ -161,9 +161,19 @@ namespace HonStatsManager.Interface
             Run(() => new Analyzer().PrintAllHeroStats());
         }
 
-        private void OnGameNightStatsButtonClick(object sender, EventArgs e)
+        private void OnGameNightStatsMenuDailyClick(object sender, EventArgs e)
         {
             Run(() => new Analyzer().PrintGameNightStats());
+        }
+
+        private void OnGameNightStatsMenuMonthlyClick(object sender, EventArgs e)
+        {
+            Run(() => new Analyzer().PrintGameMonthStats());
+        }
+
+        private void OnGameNightStatsMenuYearlyClick(object sender, EventArgs e)
+        {
+            Run(() => new Analyzer().PrintGameYearStats());
         }
 
         private void OnClearFiltersButtonClick(object sender, EventArgs e)

@@ -198,6 +198,37 @@ namespace HonStatsManager.Analysis
             }
         }
 
+        public void PrintGameMonthStats()
+        {
+            ApplyFilters();
+            Logger.Log();
+
+            PrintTitle("Game Night Monthly Stats");
+            foreach (var yearGroup in _matches
+                .GroupBy(m => m.GameNight.Month)
+                .GroupBy(monthGroup => monthGroup.First().GameNight.Year))
+            {
+                Logger.Log($"{yearGroup.Key} ({yearGroup.Sum(monthGroup => monthGroup.Count())} matches):");
+                foreach (var monthGroup in yearGroup)
+                    Logger.Log($" {monthGroup.First().GameNight:MMMM yyyy}: {monthGroup.Count()} matches");
+
+                Logger.Log();
+            }
+        }
+
+        public void PrintGameYearStats()
+        {
+            ApplyFilters();
+            Logger.Log();
+
+            PrintTitle("Game Night Yearly Stats");
+            foreach (var yearGroup in _matches
+                .GroupBy(m => m.GameNight.Year))
+            {
+                Logger.Log($"{yearGroup.Key}: {yearGroup.Count()} matches");
+            }
+        }
+
         private static void PrintTitle(string title)
         {
             title = $"=={title}==";

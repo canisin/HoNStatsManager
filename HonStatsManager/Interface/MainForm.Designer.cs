@@ -58,10 +58,15 @@
             this._heroStatsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this._heroStatsMenuAllItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this._gameNightStatsButton = new System.Windows.Forms.Button();
+            this._gameNightStatsButton = new HonStatsManager.Interface.MenuButton();
+            this._gameNightStatsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this._gameNightStatsMenuDailyItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._gameNightStatsMenuMonthlyItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._gameNightStatsMenuYearlyItem = new System.Windows.Forms.ToolStripMenuItem();
             this._menu.SuspendLayout();
             this._filtersGroup.SuspendLayout();
             this._heroStatsMenu.SuspendLayout();
+            this._gameNightStatsMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // _console
@@ -354,13 +359,44 @@
             // 
             // _gameNightStatsButton
             // 
+            this._gameNightStatsButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this._gameNightStatsButton.Location = new System.Drawing.Point(336, 171);
+            this._gameNightStatsButton.Menu = this._gameNightStatsMenu;
             this._gameNightStatsButton.Name = "_gameNightStatsButton";
             this._gameNightStatsButton.Size = new System.Drawing.Size(75, 23);
             this._gameNightStatsButton.TabIndex = 6;
             this._gameNightStatsButton.Text = "Game Night Stats";
             this._gameNightStatsButton.UseVisualStyleBackColor = true;
-            this._gameNightStatsButton.Click += new System.EventHandler(this.OnGameNightStatsButtonClick);
+            // 
+            // _gameNightStatsMenu
+            // 
+            this._gameNightStatsMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._gameNightStatsMenuDailyItem,
+            this._gameNightStatsMenuMonthlyItem,
+            this._gameNightStatsMenuYearlyItem});
+            this._gameNightStatsMenu.Name = "_gameNightStatsMenu";
+            this._gameNightStatsMenu.Size = new System.Drawing.Size(120, 70);
+            // 
+            // _gameNightStatsMenuDailyItem
+            // 
+            this._gameNightStatsMenuDailyItem.Name = "_gameNightStatsMenuDailyItem";
+            this._gameNightStatsMenuDailyItem.Size = new System.Drawing.Size(119, 22);
+            this._gameNightStatsMenuDailyItem.Text = "Daily";
+            this._gameNightStatsMenuDailyItem.Click += new System.EventHandler(this.OnGameNightStatsMenuDailyClick);
+            // 
+            // _gameNightStatsMenuMonthlyItem
+            // 
+            this._gameNightStatsMenuMonthlyItem.Name = "_gameNightStatsMenuMonthlyItem";
+            this._gameNightStatsMenuMonthlyItem.Size = new System.Drawing.Size(119, 22);
+            this._gameNightStatsMenuMonthlyItem.Text = "Monthly";
+            this._gameNightStatsMenuMonthlyItem.Click += new System.EventHandler(this.OnGameNightStatsMenuMonthlyClick);
+            // 
+            // _gameNightStatsMenuYearlyItem
+            // 
+            this._gameNightStatsMenuYearlyItem.Name = "_gameNightStatsMenuYearlyItem";
+            this._gameNightStatsMenuYearlyItem.Size = new System.Drawing.Size(119, 22);
+            this._gameNightStatsMenuYearlyItem.Text = "Yearly";
+            this._gameNightStatsMenuYearlyItem.Click += new System.EventHandler(this.OnGameNightStatsMenuYearlyClick);
             // 
             // MainForm
             // 
@@ -383,6 +419,7 @@
             this._filtersGroup.ResumeLayout(false);
             this._filtersGroup.PerformLayout();
             this._heroStatsMenu.ResumeLayout(false);
+            this._gameNightStatsMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -413,11 +450,15 @@
         private System.Windows.Forms.Button _mapStatsButton;
         private System.Windows.Forms.Button _typeStatsButton;
         private System.Windows.Forms.Button _playerStatsButton;
-        private MenuButton _heroStatsButton;
+        private HonStatsManager.Interface.MenuButton _heroStatsButton;
         private System.Windows.Forms.Button _clearFiltersButton;
         private System.Windows.Forms.ContextMenuStrip _heroStatsMenu;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem _heroStatsMenuAllItem;
-        private System.Windows.Forms.Button _gameNightStatsButton;
+        private HonStatsManager.Interface.MenuButton _gameNightStatsButton;
+        private System.Windows.Forms.ContextMenuStrip _gameNightStatsMenu;
+        private System.Windows.Forms.ToolStripMenuItem _gameNightStatsMenuDailyItem;
+        private System.Windows.Forms.ToolStripMenuItem _gameNightStatsMenuMonthlyItem;
+        private System.Windows.Forms.ToolStripMenuItem _gameNightStatsMenuYearlyItem;
     }
 }
