@@ -12,7 +12,7 @@ namespace HonStatsManager.Data
 
         public static IReadOnlyList<Match> Matches => _matches.AsReadOnly();
 
-        private static List<Match> _matches;
+        private static List<Match> _matches = new List<Match>();
 
         public static void Initialize()
         {

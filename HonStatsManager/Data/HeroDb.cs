@@ -16,7 +16,7 @@ namespace HonStatsManager.Data
         public static IReadOnlyCollection<Hero> Heroes => _heroDict.Values;
         public static IReadOnlyDictionary<string, Hero> HeroDict => _heroDict.AsReadOnly();
 
-        private static Dictionary<string, Hero> _heroDict;
+        private static Dictionary<string, Hero> _heroDict = new Dictionary<string, Hero>();
 
         public static void Initialize()
         {
