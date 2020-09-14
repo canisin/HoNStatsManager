@@ -147,7 +147,7 @@ namespace HonStatsManager.Analysis
             }
         }
 
-        private void PrintHeroStatsImpl(IEnumerable<PlayerResult> results, int minPicks)
+        private static void PrintHeroStatsImpl(IEnumerable<PlayerResult> results, int minPicks)
         {
             var heroStats = HeroDb.Heroes.ToDictionary(hero => hero.Id, hero => (Hero: hero, Picks: 0, Wins: 0));
             foreach (var result in results)
@@ -170,7 +170,7 @@ namespace HonStatsManager.Analysis
             }
         }
 
-        private void PrintTitle(string title)
+        private static void PrintTitle(string title)
         {
             title = $"=={title}==";
             var underline = Enumerable.Repeat('=', title.Length).StringJoin();
