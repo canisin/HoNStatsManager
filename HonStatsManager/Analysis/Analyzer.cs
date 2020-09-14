@@ -177,10 +177,24 @@ namespace HonStatsManager.Analysis
             Logger.Log();
 
             PrintTitle("Game Night Stats");
-            foreach (var nightGroup in _matches
-                .GroupBy(m => m.GameNight))
+            foreach (var yearGroup in _matches
+                .GroupBy(m => m.GameNight)
+                .GroupBy(nightGroup => nightGroup.Key.Month)
+                .GroupBy(monthGroup => monthGroup.First().Key.Year))
             {
-                Logger.Log($"{nightGroup.Key:D}: {nightGroup.Count()} matches");
+                var yearTitle = $"{yearGroup.Key} ({yearGroup.Sum(monthGroup => monthGroup.Sum(nightGroup => nightGroup.Count()))} matches):";
+                Logger.Log(yearTitle);
+                Logger.Log(Enumerable.Repeat('-', yearTitle.Length).StringJoin());
+                foreach (var monthGroup in yearGroup)
+                {
+                    Logger.Log($"{monthGroup.First().Key:MMMM yyyy} ({monthGroup.Sum(nightGroup => nightGroup.Count())} matches):");
+                    foreach (var nightGroup in monthGroup)
+                        Logger.Log($" {nightGroup.Key:D}: {nightGroup.Count()} matches");
+
+                    Logger.Log();
+                }
+
+                Logger.Log();
             }
         }
 
