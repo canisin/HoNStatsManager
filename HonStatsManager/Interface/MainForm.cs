@@ -103,6 +103,7 @@ namespace HonStatsManager.Interface
             _typeStatsButton.Enabled = !_isBusy;
             _playerStatsButton.Enabled = !_isBusy;
             _heroStatsButton.Enabled = !_isBusy;
+            _gameNightStatsButton.Enabled = !_isBusy;
         }
 
         public void WriteLine(string line)
@@ -158,6 +159,11 @@ namespace HonStatsManager.Interface
         private void OnHeroStatsMenuAllClick(object sender, EventArgs e)
         {
             Run(() => new Analyzer().PrintAllHeroStats());
+        }
+
+        private void OnGameNightStatsButtonClick(object sender, EventArgs e)
+        {
+            Run(() => new Analyzer().PrintGameNightStats());
         }
 
         private void OnClearFiltersButtonClick(object sender, EventArgs e)

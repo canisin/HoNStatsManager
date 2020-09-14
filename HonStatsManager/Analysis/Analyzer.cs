@@ -80,7 +80,7 @@ namespace HonStatsManager.Analysis
             foreach (var mapGroup in _matches
                 .GroupBy(m => m.Map))
             {
-                Logger.Log($"{mapGroup.First().Map}: {mapGroup.Count()} matches");
+                Logger.Log($"{mapGroup.Key}: {mapGroup.Count()} matches");
             }
         }
 
@@ -168,6 +168,19 @@ namespace HonStatsManager.Analysis
                 .Where(heroStat => heroStat.Picks >= minPicks))
             {
                 Logger.Log($"{hero.Name}: {wins}/{picks} ({(double) wins / picks * 100:#.}%)");
+            }
+        }
+
+        public void PrintGameNightStats()
+        {
+            ApplyFilters();
+            Logger.Log();
+
+            PrintTitle("Game Night Stats");
+            foreach (var nightGroup in _matches
+                .GroupBy(m => m.GameNight))
+            {
+                Logger.Log($"{nightGroup.Key:D}: {nightGroup.Count()} matches");
             }
         }
 
