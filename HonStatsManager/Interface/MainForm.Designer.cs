@@ -32,7 +32,6 @@
             this._menu = new System.Windows.Forms.MenuStrip();
             this._databasesMenu = new System.Windows.Forms.ToolStripMenuItem();
             this._matchesMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this._matchesReloadMenu = new System.Windows.Forms.ToolStripMenuItem();
             this._matchesUpdateMenu = new System.Windows.Forms.ToolStripMenuItem();
             this._matchesResetMenu = new System.Windows.Forms.ToolStripMenuItem();
             this._heroesMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -94,31 +93,23 @@
             // _matchesMenu
             // 
             this._matchesMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._matchesReloadMenu,
             this._matchesUpdateMenu,
             this._matchesResetMenu});
             this._matchesMenu.Name = "_matchesMenu";
-            this._matchesMenu.Size = new System.Drawing.Size(119, 22);
+            this._matchesMenu.Size = new System.Drawing.Size(180, 22);
             this._matchesMenu.Text = "Matches";
-            // 
-            // _matchesReloadMenu
-            // 
-            this._matchesReloadMenu.Name = "_matchesReloadMenu";
-            this._matchesReloadMenu.Size = new System.Drawing.Size(112, 22);
-            this._matchesReloadMenu.Text = "Reload";
-            this._matchesReloadMenu.Click += new System.EventHandler(this.OnMatchesReloadMenuClick);
             // 
             // _matchesUpdateMenu
             // 
             this._matchesUpdateMenu.Name = "_matchesUpdateMenu";
-            this._matchesUpdateMenu.Size = new System.Drawing.Size(112, 22);
+            this._matchesUpdateMenu.Size = new System.Drawing.Size(180, 22);
             this._matchesUpdateMenu.Text = "Update";
             this._matchesUpdateMenu.Click += new System.EventHandler(this.OnMatchesUpdateMenuClick);
             // 
             // _matchesResetMenu
             // 
             this._matchesResetMenu.Name = "_matchesResetMenu";
-            this._matchesResetMenu.Size = new System.Drawing.Size(112, 22);
+            this._matchesResetMenu.Size = new System.Drawing.Size(180, 22);
             this._matchesResetMenu.Text = "Reset";
             this._matchesResetMenu.Click += new System.EventHandler(this.OnMatchesResetMenuClick);
             // 
@@ -127,13 +118,13 @@
             this._heroesMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._heroesUpdateMenu});
             this._heroesMenu.Name = "_heroesMenu";
-            this._heroesMenu.Size = new System.Drawing.Size(119, 22);
+            this._heroesMenu.Size = new System.Drawing.Size(180, 22);
             this._heroesMenu.Text = "Heroes";
             // 
             // _heroesUpdateMenu
             // 
             this._heroesUpdateMenu.Name = "_heroesUpdateMenu";
-            this._heroesUpdateMenu.Size = new System.Drawing.Size(112, 22);
+            this._heroesUpdateMenu.Size = new System.Drawing.Size(180, 22);
             this._heroesUpdateMenu.Text = "Update";
             this._heroesUpdateMenu.Click += new System.EventHandler(this.OnHeroesUpdateMenuClick);
             // 
@@ -362,7 +353,6 @@
         private System.Windows.Forms.MenuStrip _menu;
         private System.Windows.Forms.ToolStripMenuItem _databasesMenu;
         private System.Windows.Forms.ToolStripMenuItem _matchesMenu;
-        private System.Windows.Forms.ToolStripMenuItem _matchesReloadMenu;
         private System.Windows.Forms.ToolStripMenuItem _matchesUpdateMenu;
         private System.Windows.Forms.ToolStripMenuItem _matchesResetMenu;
         private System.Windows.Forms.ToolStripMenuItem _heroesMenu;

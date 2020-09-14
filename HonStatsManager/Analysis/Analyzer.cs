@@ -6,9 +6,16 @@ using HonStatsManager.Utility;
 
 namespace HonStatsManager.Analysis
 {
-    internal static class Analyzer
+    internal class Analyzer
     {
-        private static void ApplyFilters()
+        private List<Match> _matches;
+
+        public Analyzer()
+        {
+            _matches = MatchDb.Matches.ToList();
+        }
+
+        private void ApplyFilters()
         {
             var filters = Program.MainForm.GetFilters();
 
@@ -16,81 +23,85 @@ namespace HonStatsManager.Analysis
             if (filteredMatchTypes.Any())
             {
                 Logger.Log("Filtering match types..");
-                MatchDb.FilterMatches(m => !m.Type.In(filteredMatchTypes));
+                FilterMatches(m => !m.Type.In(filteredMatchTypes));
             }
 
             var filteredMaps = filters.GetFilteredMaps();
             if (filteredMaps.Any())
             {
                 Logger.Log("Filtering maps..");
-                MatchDb.FilterMatches(m => !m.Map.In(filteredMaps));
+                FilterMatches(m => !m.Map.In(filteredMaps));
             }
 
             if (filters.HasFlag(FilterType.DataKicks))
             {
                 Logger.Log("Filtering matches with kicked players..");
-                MatchDb.FilterMatches(m => !m.PlayerResults.Any(r => r.Kicked));
+                FilterMatches(m => !m.PlayerResults.Any(r => r.Kicked));
             }
 
             if (filters.HasFlag(FilterType.DataDiscos))
             {
                 Logger.Log("Filtering matches with disconnected players..");
-                MatchDb.FilterMatches(m => !m.PlayerResults.Any(r => r.Discos));
+                FilterMatches(m => !m.PlayerResults.Any(r => r.Discos));
             }
 
             if (filters.HasFlag(FilterType.DataIncomplete))
             {
                 Logger.Log("Filtering incomplete matches..");
-                MatchDb.FilterMatches(m => m.PlayerResults.Any(r => r.Wins));
+                FilterMatches(m => m.PlayerResults.Any(r => r.Wins));
             }
 
             if (filters.HasFlag(FilterType.DataMissingHeroes))
             {
                 Logger.Log("Filtering matches with missing hero information..");
-                MatchDb.FilterMatches(m => m.PlayerResults.All(r => r.HeroId.KeyIn(HeroDb.HeroDict)));
+                FilterMatches(m => m.PlayerResults.All(r => r.HeroId.KeyIn(HeroDb.HeroDict)));
             }
         }
 
-        public static void PrintMapStats()
+        private void FilterMatches(Func<Match, bool> predicate)
+        {
+            var initialCount = _matches.Count;
+            _matches = _matches.Where(predicate).ToList();
+            Logger.Log($"{initialCount - _matches.Count} matches filtered, {_matches.Count} matches remain.");
+        }
+
+        public void PrintMapStats()
         {
             Logger.Log();
             Logger.Log();
-            MatchDb.Reload();
             ApplyFilters();
             Logger.Log();
 
             PrintTitle("Map Stats");
-            foreach (var mapGroup in MatchDb.Matches
+            foreach (var mapGroup in _matches
                 .GroupBy(m => m.Map))
             {
                 Logger.Log($"{mapGroup.First().Map}: {mapGroup.Count()} matches");
             }
         }
 
-        public static void PrintMatchTypeStats()
+        public void PrintMatchTypeStats()
         {
             Logger.Log();
             Logger.Log();
-            MatchDb.Reload();
             ApplyFilters();
             Logger.Log();
 
             PrintTitle("Match Stats");
             foreach (var matchType in Enum.GetValues(typeof(MatchType)).Cast<MatchType>())
             {
-                Logger.Log($"{matchType}: {MatchDb.Matches.Count(m => m.Type == matchType)} matches");
+                Logger.Log($"{matchType}: {_matches.Count(m => m.Type == matchType)} matches");
             }
         }
 
-        public static void PrintPlayerStats()
+        public void PrintPlayerStats()
         {
             Logger.Log();
             Logger.Log();
-            MatchDb.Reload();
             ApplyFilters();
             Logger.Log();
 
-            foreach (var matchGroupGroup in MatchDb.Matches
+            foreach (var matchGroupGroup in _matches
                 .GroupBy(m => m.Type)
                 .OrderBy(mg => mg.Key))
             {
@@ -118,28 +129,27 @@ namespace HonStatsManager.Analysis
             }
         }
 
-        public static void PrintHeroStats()
+        public void PrintHeroStats()
         {
             Logger.Log();
             Logger.Log();
-            MatchDb.Reload();
             ApplyFilters();
             Logger.Log();
 
             PrintTitle("Hero Stats");
-            PrintHeroStatsImpl(MatchDb.Matches.SelectMany(m => m.PlayerResults), 1);
+            PrintHeroStatsImpl(_matches.SelectMany(m => m.PlayerResults), 1);
 
             foreach (var player in Honzor.Players)
             {
                 Logger.Log();
                 Logger.Log();
                 PrintTitle($"{player.Nickname}'s Hero Stats");
-                PrintHeroStatsImpl(MatchDb.Matches.SelectMany(m => m.PlayerResults)
+                PrintHeroStatsImpl(_matches.SelectMany(m => m.PlayerResults)
                     .Where(r => r.Player.Nickname == player.Nickname), 5);
             }
         }
 
-        private static void PrintHeroStatsImpl(IEnumerable<PlayerResult> results, int minPicks)
+        private void PrintHeroStatsImpl(IEnumerable<PlayerResult> results, int minPicks)
         {
             var heroStats = HeroDb.Heroes.ToDictionary(hero => hero.Id, hero => (Hero: hero, Picks: 0, Wins: 0));
             foreach (var result in results)
@@ -162,7 +172,7 @@ namespace HonStatsManager.Analysis
             }
         }
 
-        private static void PrintTitle(string title)
+        private void PrintTitle(string title)
         {
             title = $"=={title}==";
             var underline = Enumerable.Repeat('=', title.Length).StringJoin();

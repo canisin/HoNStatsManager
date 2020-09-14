@@ -83,7 +83,6 @@ namespace HonStatsManager.Interface
 
             _isBusy = isBusy;
 
-            _matchesReloadMenu.Enabled = !_isBusy;
             _matchesUpdateMenu.Enabled = !_isBusy;
             _matchesResetMenu.Enabled = !_isBusy;
             _heroesUpdateMenu.Enabled = !_isBusy;
@@ -111,11 +110,6 @@ namespace HonStatsManager.Interface
             _console.AppendText(line + Environment.NewLine);
         }
 
-        private void OnMatchesReloadMenuClick(object sender, EventArgs e)
-        {
-            Run(MatchDb.Reload);
-        }
-
         private void OnMatchesUpdateMenuClick(object sender, EventArgs e)
         {
             Run(MatchDb.Update);
@@ -133,22 +127,22 @@ namespace HonStatsManager.Interface
 
         private void OnMapStatsButtonClick(object sender, EventArgs e)
         {
-            Run(Analyzer.PrintMapStats);
+            Run(() => new Analyzer().PrintMapStats());
         }
 
         private void OnTypeStatsButtonClick(object sender, EventArgs e)
         {
-            Run(Analyzer.PrintMatchTypeStats);
+            Run(() => new Analyzer().PrintMatchTypeStats());
         }
 
         private void OnPlayerStatsButtonClick(object sender, EventArgs e)
         {
-            Run(Analyzer.PrintPlayerStats);
+            Run(() => new Analyzer().PrintPlayerStats());
         }
 
         private void OnHeroStatsButtonClick(object sender, EventArgs e)
         {
-            Run(Analyzer.PrintHeroStats);
+            Run(() => new Analyzer().PrintHeroStats());
         }
 
         private void OnClearFiltersButtonClick(object sender, EventArgs e)

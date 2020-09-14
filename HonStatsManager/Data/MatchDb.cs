@@ -20,14 +20,8 @@ namespace HonStatsManager.Data
             Read();
         }
 
-        public static void Reload()
-        {
-            Read();
-        }
-
         public static void Update()
         {
-            Read();
             Download();
             Write();
         }
@@ -37,13 +31,6 @@ namespace HonStatsManager.Data
             Clear();
             Download();
             Write();
-        }
-
-        public static void FilterMatches(Func<Match, bool> predicate)
-        {
-            var initialCount = _matches.Count;
-            _matches = _matches.Where(predicate).ToList();
-            Logger.Log($"{initialCount - _matches.Count} matches filtered, {_matches.Count} matches remain.");
         }
 
         private static void Clear()
