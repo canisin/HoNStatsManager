@@ -147,6 +147,11 @@ namespace HonStatsManager.Interface
             Run(() => new Analyzer().PrintPlayerStats());
         }
 
+        private void OnHeroStatsMenuAllClick(object sender, EventArgs e)
+        {
+            Run(() => new Analyzer().PrintAllHeroStats());
+        }
+
         private void OnHeroStatsButtonItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             var player = Honzor.Players.SingleOrDefault(p => p.Nickname == e.ClickedItem.Text);
@@ -154,11 +159,6 @@ namespace HonStatsManager.Interface
                 return;
 
             Run(() => new Analyzer().PrintPlayerHeroStats(player));
-        }
-
-        private void OnHeroStatsMenuAllClick(object sender, EventArgs e)
-        {
-            Run(() => new Analyzer().PrintAllHeroStats());
         }
 
         private void OnGameNightStatsMenuDailyClick(object sender, EventArgs e)

@@ -182,12 +182,14 @@ namespace HonStatsManager.Analysis
                 .GroupBy(nightGroup => nightGroup.Key.Month)
                 .GroupBy(monthGroup => monthGroup.First().Key.Year))
             {
-                var yearTitle = $"{yearGroup.Key} ({yearGroup.Sum(monthGroup => monthGroup.Sum(nightGroup => nightGroup.Count()))} matches):";
+                var yearTitle =
+                    $"{yearGroup.Key} ({yearGroup.Sum(monthGroup => monthGroup.Sum(nightGroup => nightGroup.Count()))} matches):";
                 Logger.Log(yearTitle);
                 Logger.Log(Enumerable.Repeat('-', yearTitle.Length).StringJoin());
                 foreach (var monthGroup in yearGroup)
                 {
-                    Logger.Log($"{monthGroup.First().Key:MMMM yyyy} ({monthGroup.Sum(nightGroup => nightGroup.Count())} matches):");
+                    Logger.Log(
+                        $"{monthGroup.First().Key:MMMM yyyy} ({monthGroup.Sum(nightGroup => nightGroup.Count())} matches):");
                     foreach (var nightGroup in monthGroup)
                         Logger.Log($" {nightGroup.Key:D}: {nightGroup.Count()} matches");
 
