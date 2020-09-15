@@ -135,7 +135,7 @@ namespace HonStatsManager.Analysis
             Logger.Log();
 
             PrintTitle("Hero Stats");
-            PrintHeroStatsImpl(_matches.SelectMany(m => m.PlayerResults), 1);
+            PrintHeroStatsImpl(_matches.SelectMany(m => m.PlayerResults));
         }
 
         public void PrintPlayerHeroStats(Player player)
@@ -143,12 +143,14 @@ namespace HonStatsManager.Analysis
             ApplyFilters();
             Logger.Log();
 
+            const int minPicks = 5;
             PrintTitle($"{player.Nickname}'s Hero Stats");
+            Logger.Log($"(Only heroes with at least {minPicks} picks are shown.)");
             PrintHeroStatsImpl(_matches.SelectMany(m => m.PlayerResults)
-                .Where(r => r.Player.Nickname == player.Nickname), 5);
+                .Where(r => r.Player.Nickname == player.Nickname), minPicks);
         }
 
-        private static void PrintHeroStatsImpl(IEnumerable<PlayerResult> results, int minPicks)
+        private static void PrintHeroStatsImpl(IEnumerable<PlayerResult> results, int minPicks = 0)
         {
             var heroStats = HeroDb.Heroes.ToDictionary(hero => hero.Id, hero => (Hero: hero, Picks: 0, Wins: 0));
             foreach (var result in results)
@@ -167,7 +169,8 @@ namespace HonStatsManager.Analysis
                 .OrderByDescending(heroStat => heroStat.Picks)
                 .Where(heroStat => heroStat.Picks >= minPicks))
             {
-                Logger.Log($"{hero.Name, -20}: {wins,2}/{picks,-2} ({(double) wins / picks:P0})");
+                var ratio = picks > 0 ? (double) wins / picks : 0.0;
+                Logger.Log($"{hero.Name, -20}: {wins,2}/{picks,-2} ({ratio:P0})");
             }
         }
 
